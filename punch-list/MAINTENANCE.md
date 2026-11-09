@@ -1,7 +1,8 @@
 # Pinestone Punch List: Maintenance & Recovery Guide
 
 Address: https://dlabib-droid.github.io/email-assets/punch-list/
-Current version: **1.3** (shown at the bottom of the app's Projects screen)
+Current version: **1.3.2, stable release** (shown at the bottom of the app's Projects screen)
+For everyday instructions see **README.md**. This file covers updates, recovery and rules for changing the code.
 
 ---
 
@@ -49,7 +50,7 @@ Updating the app only swaps the app files. It never touches your projects or pho
    1. Open github.com/dlabib-droid/email-assets.
    2. Click into the **punch-list** folder, so the address bar ends in `/tree/main/punch-list`.
    3. Click **Add file › Upload files**.
-   4. Drag in the **files** from inside the new folder, **not the folder itself**. Dragging the folder creates `punch-list/punch-list/`, and your phone keeps the old version.
+   4. Drag in the **files** from inside the new folder (or just the changed files), **not the folder itself**. Dragging the folder creates `punch-list/punch-list/`, and your phone keeps the old version.
    5. Commit to `main`.
    - Never delete `logo.png`, and don't upload a different file named `logo.png` unless you mean to change the logo.
 4. **Check the upload.**
@@ -94,6 +95,8 @@ Your data is not affected by rolling back.
 - Backup format: `{app:'pinestone-punch-list', version:1, exportedAt, projects[], tasks[], photos[]}`, with photos as base64 data URLs. New fields may be added; existing ones must not be renamed or removed.
 - Bump `VERSION` in `sw.js` and `APP_VERSION` in `index.html` together on every release.
 - The app has no outside dependencies: no CDN, no fonts, no servers, no Claude services. Keep it that way so it works offline and independently.
+- The source code is the files themselves (`index.html` contains all screens, PDF generation and storage; `sw.js` is the offline layer). There is no build step: edit the file, raise the VERSION, upload.
+- Deleting a project uses one database transaction (`DB.deleteProject`), so a project is either fully removed or untouched.
 - Before releasing, test:
   - an upgrade from the previous version with real data;
   - an offline launch;

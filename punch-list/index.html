@@ -192,7 +192,7 @@ const IN_CLAUDE = !!(window.claude && typeof window.claude.use === 'function');
 let downloadsNS = null;
 if (IN_CLAUDE) { try { window.claude.use('downloads').then(d => { downloadsNS = d; }).catch(() => {}); } catch (e) {} }
 
-const APP_VERSION = '1.3.1';
+const APP_VERSION = '1.3.2';
 let BOOTED = false;
 
 /* ---------- logo: logo.png placed next to this file; text wordmark if missing ---------- */
@@ -348,6 +348,22 @@ const DB = {
   get(store, id) { return this.mem ? Promise.resolve(this.mem[store].get(id)) : this.tx(store, 'readonly', s => s.get(id)); },
   put(store, o) { if (this.mem) { this.mem[store].set(o.id, o); return Promise.resolve(); } return this.tx(store, 'readwrite', s => s.put(o)); },
   del(store, id) { if (this.mem) { this.mem[store].delete(id); return Promise.resolve(); } return this.tx(store, 'readwrite', s => s.delete(id)); },
+  /* Removes one project's photos, items and record together: either all of it is deleted or none of it. Other projects are never touched. */
+  deleteProject(pid) {
+    if (this.mem) {
+      for (const st of ['photos', 'tasks']) for (const [k, o] of this.mem[st]) if (o.projectId === pid) this.mem[st].delete(k);
+      this.mem.projects.delete(pid); return Promise.resolve();
+    }
+    return new Promise((res, rej) => {
+      const t = this.db.transaction(['photos', 'tasks', 'projects'], 'readwrite');
+      for (const st of ['photos', 'tasks']) {
+        const c = t.objectStore(st).index('projectId').openKeyCursor(IDBKeyRange.only(pid));
+        c.onsuccess = () => { const cur = c.result; if (cur) { t.objectStore(st).delete(cur.primaryKey); cur.continue(); } };
+      }
+      t.objectStore('projects').delete(pid);
+      t.oncomplete = () => res(); t.onerror = () => rej(t.error); t.onabort = () => rej(t.error || new Error('Delete failed'));
+    });
+  },
   byIndex(store, idx, v) { return this.mem ? Promise.resolve([...this.mem[store].values()].filter(o => o[idx] === v)) : this.tx(store, 'readonly', s => s.index(idx).getAll(v)); }
 };
 /* Storage warnings: shown at the top of every screen */
@@ -509,13 +525,15 @@ async function saveProject(isNew) {
 async function deleteProject() {
   const p = cur();
   const n = projTasks().length;
-  if (!await ask(`Delete "${p.name}" and its ${n} item${n === 1 ? '' : 's'} and photos from this device? This cannot be undone.`, 'Delete', {danger: true})) return;
+  const unsaved = backupStatus(p).dirty ? ' This project has changes that are not in a backup.' : '';
+  if (!await ask(`Delete "${p.name}" and its ${n} item${n === 1 ? '' : 's'} and photos from this device?${unsaved} This cannot be undone.`, 'Delete', {danger: true})) return;
   busy('Deleting…');
-  for (const ph of await DB.byIndex('photos', 'projectId', p.id)) await DB.del('photos', ph.id);
-  for (const t of projTasks()) await DB.del('tasks', t.id);
-  await DB.del('projects', p.id);
+  try { await DB.deleteProject(p.id); }
+  catch (e) { busy(); return ask('The project could not be deleted. Nothing was removed. Close the app completely, reopen it and try again.', 'OK', {cancel: null}); }
+  for (const t of projTasks(p.id)) for (const id of t.photoIds || []) { const u = thumbURL.get(id); if (u) { URL.revokeObjectURL(u); thumbURL.delete(id); } }
   S.tasks = S.tasks.filter(t => t.projectId !== p.id); S.projects = S.projects.filter(x => x.id !== p.id);
   busy(); closeSheet(); S.view = 'home'; S.pid = null; render(); toast('Project deleted');
+  const w = $('#storage-warn'); if (w.className === 'low') { w.hidden = true; document.body.classList.remove('has-warn'); checkStorageSpace(); }
 }
 async function touchProject() { const p = cur(); if (p) { p.updatedAt = Date.now(); await DB.put('projects', p); } }
 
@@ -597,8 +615,11 @@ async function toggleTask(id) {
 async function deleteTask() {
   const t = S.tasks.find(x => x.id === D.id);
   if (!await ask(`Delete item ${t.num}${t.photoIds.length ? ' and its photos' : ''}?`, 'Delete', {danger: true})) return;
-  for (const id of t.photoIds) await DB.del('photos', id);
-  await DB.del('tasks', t.id); S.tasks = S.tasks.filter(x => x.id !== t.id); await touchProject();
+  try {
+    await DB.del('tasks', t.id);
+    for (const id of t.photoIds) { await DB.del('photos', id); const u = thumbURL.get(id); if (u) { URL.revokeObjectURL(u); thumbURL.delete(id); } }
+  } catch (e) { return saveFailed(e); }
+  S.tasks = S.tasks.filter(x => x.id !== t.id); await touchProject().catch(() => {});
   closeSheet(); render(); toast(`Item ${t.num} deleted`);
 }
 

@@ -5,11 +5,11 @@
 
    EVERY TIME YOU UPLOAD A NEW VERSION: change VERSION below (e.g. 1.3.0 -> 1.3.1).
    That is how phones notice the update. */
-const VERSION = '1.3.1';
+const VERSION = '1.3.2';
 const CACHE = 'pinestone-punch-' + VERSION;
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png'];
 const OPTIONAL = ['./logo.png'];
-const NETWORK_WAIT_MS = 4000; // weak signal: after this, use the saved copy instead of waiting
+const NETWORK_WAIT_MS = 2500; // weak signal: after this, use the saved copy instead of waiting
 
 // Responses that came through a redirect can't be replayed for page loads on iPhone, so store a clean copy.
 async function clean(res) {
