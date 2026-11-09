@@ -42,6 +42,18 @@ h1{font-size:28px;line-height:1.15;margin:6px 0 4px;letter-spacing:-.015em}
 .logo-sm{display:block;max-height:22px;max-width:120px;width:auto;height:auto}
 .offline{font-size:13px;color:var(--muted);margin:12px 0 0;display:flex;justify-content:space-between;gap:10px}
 .offline b{color:var(--ink);font-weight:600}
+.vbtn{appearance:none;background:none;border:none;padding:0;font-size:13px;color:var(--muted);text-decoration:underline;cursor:pointer;white-space:nowrap}
+.bk{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted);margin:-6px 2px 16px}
+.bk button{appearance:none;background:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);white-space:nowrap}
+.bk.need{color:#8a4b0f}
+.bk.need button{border-color:#d9a066}
+.pneed{color:#8a4b0f}
+#storage-warn{position:fixed;left:0;right:0;top:0;z-index:60;padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;font-size:14px;line-height:1.35;text-align:center}
+#storage-warn.err{background:#b3261e;color:#fff}
+#storage-warn.low{background:#fff4e5;color:#7a3e00;border-bottom:1px solid #f0c48a}
+#storage-warn button{appearance:none;border:1px solid currentColor;background:none;color:inherit;border-radius:999px;padding:4px 10px;margin-left:6px;font-size:13px;font-weight:600}
+body.has-warn #app,body.has-warn .sheet-in{padding-top:calc(env(safe-area-inset-top) + 92px)}
+.dbox .row3{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:8px}
 .bar .link{display:flex;align-items:center;gap:2px}
 .bar svg{width:20px;height:20px}
 .plist{list-style:none;margin:18px 0 0;padding:0;border-top:1px solid var(--line)}
@@ -124,52 +136,12 @@ h1{font-size:28px;line-height:1.15;margin:6px 0 4px;letter-spacing:-.015em}
 /* print layout */
 #print-root{display:none}
 @media print{
-  @page{size:letter;margin:.7in .75in .75in .75in;
-    @bottom-left{content:"Pinestone Development \00B7  pinestone-development.com";font:7.5pt Helvetica,Arial,sans-serif;color:#808080}
-    @bottom-right{content:"Page " counter(page) " of " counter(pages);font:7.5pt Helvetica,Arial,sans-serif;color:#808080}}
-  html,body{background:#fff!important;overflow:visible!important;height:auto!important}
+  @page{size:8.5in 11in;margin:0}
+  html,body{margin:0!important;padding:0!important;background:#fff!important;overflow:visible!important;height:auto!important}
   body>*:not(#print-root){display:none!important}
-  #print-root{display:block;font:10pt/1.35 Helvetica,Arial,sans-serif;color:#24282b;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .pr-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1.2pt solid #24282b;padding-bottom:7pt}
-  .pr-logo{display:block;max-height:.6in;max-width:3.1in;width:auto;height:auto}
-  .pr-brand{font-weight:700;font-size:12.5pt;letter-spacing:2.4pt}
-  .pr-brand span{font-weight:400;color:#595959}
-  .pr-kind{font-weight:700;font-size:8.5pt;letter-spacing:1.5pt;color:#595959}
-  .pr-name{font-size:19pt;font-weight:700;margin:16pt 0 2pt}
-  .pr-addr{color:#666;font-size:10pt}
-  .pr-info{display:flex;gap:28pt;margin:12pt 0 4pt;padding-bottom:10pt;border-bottom:.6pt solid #d0d0d0}
-  .pr-info div{font-size:10pt}
-  .pr-info small{display:block;font-size:7pt;font-weight:700;letter-spacing:1pt;color:#808080;margin-bottom:2pt}
-  .pr-sub{margin:4pt 0 0;font-size:10pt}
-  .pr-sub span{display:inline-block;width:3in;border-bottom:.6pt solid #888;margin-left:6pt}
-  .pr-group{margin-top:12pt;background:#f3f3f3;padding:4pt 8pt;font-weight:700;font-size:8.5pt;letter-spacing:1pt;text-transform:uppercase;display:flex;justify-content:space-between;break-after:avoid}
-  .pr-group span{font-weight:400;color:#808080;letter-spacing:0;text-transform:none}
-  .pr-row{display:grid;grid-template-columns:20pt 30pt 1fr;padding:8pt 0 8pt;border-bottom:.6pt solid #dcdcdc;break-inside:avoid}
-  .pr-cb{width:11pt;height:11pt;border:.9pt solid #4d4d4d;margin-top:1.5pt;position:relative}
-  .pr-row.done .pr-cb::after{content:"";position:absolute;left:3pt;top:0;width:3.5pt;height:7pt;border:solid #24282b;border-width:0 1.5pt 1.5pt 0;transform:rotate(40deg)}
-  .pr-num{font-weight:700}
-  .pr-desc{font-size:10.5pt;white-space:pre-wrap}
-  .pr-row.done .pr-desc{color:#737373}
-  .pr-meta{color:#737373;font-size:8.5pt;margin-top:2pt}
-  .pr-notes{grid-column:2/4;display:grid;grid-template-columns:30pt 1fr;margin-top:2pt}
-  .pr-notes small{font-size:6.5pt;font-weight:700;letter-spacing:.8pt;color:#999;align-self:end;padding-bottom:2pt}
-  .pr-notes div{height:19pt;border-bottom:.5pt solid #cfcfcf}
-  .pr-notes div+div{grid-column:2}
-  .pr-empty{padding:18pt 0;color:#808080}
-  .pr-sign{break-inside:avoid;margin-top:18pt}
-  .pr-sign h4{margin:0 0 4pt;font-size:9pt;letter-spacing:1.2pt}
-  .pr-sign p{margin:0 0 6pt;font-size:8.5pt;color:#666}
-  .pr-sigrow{display:grid;grid-template-columns:2fr 2fr 1fr;gap:16pt;margin-top:22pt}
-  .pr-sigrow div{border-top:.7pt solid #4d4d4d;padding-top:3pt;font-size:7.5pt;color:#737373}
-  .pr-app{break-before:page}
-  .pr-app h2{font-size:14pt;margin:0 0 4pt}
-  .pr-app>p{margin:0 0 10pt;font-size:8.5pt;color:#737373}
-  .pr-grid{display:grid;grid-template-columns:1fr 1fr;gap:14pt 18pt}
-  .pr-cell{break-inside:avoid}
-  .pr-cell b{font-size:8.5pt}
-  .pr-cell small{display:block;font-size:8pt;color:#737373;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3pt}
-  .pr-cell div{height:2.2in;border:.6pt solid #d0d0d0;display:flex;align-items:center;justify-content:center;background:#fafafa}
-  .pr-cell img{max-width:100%;max-height:100%}
+  #print-root{display:block}
+  #print-root svg{display:block;width:8.5in;height:11in;break-after:page;page-break-after:always;overflow:hidden}
+  #print-root svg:last-child{break-after:auto;page-break-after:auto}
 }
 </style>
 </head>
@@ -180,11 +152,11 @@ h1{font-size:28px;line-height:1.15;margin:6px 0 4px;letter-spacing:-.015em}
 <div id="busy" hidden><div class="dbox"><p id="busy-msg">Working…</p></div></div>
 <div id="viewer" hidden></div>
 <div id="toast" hidden></div>
+<div id="storage-warn" hidden></div>
 <input type="file" id="in-camera" class="vh" accept="image/*" capture="environment">
 <input type="file" id="in-library" class="vh" accept="image/*" multiple>
 <input type="file" id="in-restore" class="vh" accept=".json,application/json">
 <div id="print-root"></div>
-<style id="print-dyn"></style>
 <script>
 'use strict';
 /* ---------- basics ---------- */
@@ -220,7 +192,7 @@ const IN_CLAUDE = !!(window.claude && typeof window.claude.use === 'function');
 let downloadsNS = null;
 if (IN_CLAUDE) { try { window.claude.use('downloads').then(d => { downloadsNS = d; }).catch(() => {}); } catch (e) {} }
 
-const APP_VERSION = '1.1';
+const APP_VERSION = '1.3';
 let BOOTED = false;
 
 /* ---------- logo: logo.png placed next to this file; text wordmark if missing ---------- */
@@ -232,11 +204,47 @@ if (!IN_CLAUDE) {
   li.onload = () => { if (li.naturalWidth > 0) { LOGO.ok = true; LOGO.img = li; if (BOOTED) render(); } };
   li.src = 'logo.png';
 }
+/* Trim empty (transparent or white) space around the logo so its visible width is what gets sized. */
+function trimLogo(img) {
+  const k = Math.min(1, 3000 / Math.max(img.naturalWidth, img.naturalHeight));
+  const w = Math.round(img.naturalWidth * k), h = Math.round(img.naturalHeight * k);
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const x = c.getContext('2d'); x.drawImage(img, 0, 0, w, h);
+  let d; try { d = x.getImageData(0, 0, w, h).data; } catch (e) { return c; }
+  let x0 = w, y0 = h, x1 = -1, y1 = -1;
+  for (let yy = 0; yy < h; yy++) for (let xx = 0; xx < w; xx++) {
+    const i = (yy * w + xx) * 4;
+    if (d[i + 3] > 16 && !(d[i] > 242 && d[i + 1] > 242 && d[i + 2] > 242)) { if (xx < x0) x0 = xx; if (xx > x1) x1 = xx; if (yy < y0) y0 = yy; if (yy > y1) y1 = yy; }
+  }
+  if (x1 < 0) return c;
+  const pad = Math.round(Math.max(x1 - x0, y1 - y0) * 0.01);
+  x0 = Math.max(0, x0 - pad); y0 = Math.max(0, y0 - pad); x1 = Math.min(w - 1, x1 + pad); y1 = Math.min(h - 1, y1 + pad);
+  const o = document.createElement('canvas'); o.width = x1 - x0 + 1; o.height = y1 - y0 + 1;
+  o.getContext('2d').drawImage(c, x0, y0, o.width, o.height, 0, 0, o.width, o.height);
+  return o;
+}
+/* Lossless logo for the PDF (pure white background, crisp edges); JPEG only if the browser can't compress. */
+async function losslessLogo(t) {
+  const k = Math.min(1, 1600 / t.width), w = Math.max(1, Math.round(t.width * k)), h = Math.max(1, Math.round(t.height * k));
+  if (typeof CompressionStream === 'function') {
+    try {
+      const c = document.createElement('canvas'); c.width = w; c.height = h;
+      const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, w, h); x.drawImage(t, 0, 0, w, h);
+      const d = x.getImageData(0, 0, w, h).data; const rgb = new Uint8Array(w * h * 3);
+      for (let i = 0, o = 0; i < d.length; i += 4) { rgb[o++] = d[i]; rgb[o++] = d[i + 1]; rgb[o++] = d[i + 2]; }
+      const z = new Uint8Array(await new Response(new Blob([rgb]).stream().pipeThrough(new CompressionStream('deflate'))).arrayBuffer());
+      return {bytes: z, w, h, filter: 'FlateDecode'};
+    } catch (e) {}
+  }
+  const j = await canvasJpeg(t, 1600, 0.96);
+  return {bytes: new Uint8Array(await j.blob.arrayBuffer()), w: j.w, h: j.h};
+}
 async function logoJpeg() {
   if (!LOGO.ok) return null;
   if (!LOGO.jpeg) {
-    const j = await canvasJpeg(LOGO.img, 1400, 0.95);
-    LOGO.jpeg = {bytes: new Uint8Array(await j.blob.arrayBuffer()), w: j.w, h: j.h};
+    const t = trimLogo(LOGO.img);
+    try { LOGO.png = t.toDataURL('image/png'); } catch (e) { LOGO.png = 'logo.png'; }
+    LOGO.jpeg = await losslessLogo(t);
   }
   return LOGO.jpeg;
 }
@@ -247,26 +255,64 @@ const OFFLINE = {state: 'unsupported'};
 function offlineLine() {
   const label = {ready: '<b>Ready</b> — works without internet', setup: 'Setting up — keep the app open with internet for a moment',
     unsupported: 'Not available in this browser', off: 'Not available in this preview'}[OFFLINE.state];
-  return `<p class="offline"><span>Offline mode: ${label}</span><span>v${APP_VERSION}</span></p>`;
+  return `<p class="offline"><span>Offline mode: ${label}</span>${OFFLINE.state === 'off' || OFFLINE.state === 'unsupported' ? `<span>v${APP_VERSION}</span>` : `<button class="vbtn" data-act="check-update">v${APP_VERSION} · Check for update</button>`}</p>`;
 }
 function setOffline(s) { OFFLINE.state = s; const el = document.querySelector('.offline'); if (el) el.outerHTML = offlineLine(); }
 if (IN_CLAUDE) OFFLINE.state = 'off';
 else if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-  OFFLINE.state = navigator.serviceWorker.controller ? 'ready' : 'setup';
+  const hadController = !!navigator.serviceWorker.controller;
+  OFFLINE.state = hadController ? 'ready' : 'setup';
+  let swReg = null, reloadQueued = false;
+  // A new version was installed: reload into it, but only when nothing is open, so no typing is ever lost.
+  const norm = v => String(v || '').replace(/(\.0)+$/, '');
+  const swVersion = () => new Promise(res => {
+    const c = navigator.serviceWorker.controller; if (!c) return res(null);
+    const ch = new MessageChannel(); ch.port1.onmessage = e => res(e.data && e.data.version); c.postMessage({type: 'version'}, [ch.port2]);
+    setTimeout(() => res(null), 1500);
+  });
+  const applyUpdate = async () => {
+    if (reloadQueued) return;
+    const v = await swVersion();
+    if (v && norm(v) === norm(APP_VERSION)) return; // this screen is already the new version
+    if (reloadQueued) return; reloadQueued = true;
+    const tryReload = () => {
+      const idle = $('#sheet').hidden && $('#dialog').hidden && $('#busy').hidden && $('#viewer').hidden;
+      if (idle) { try { sessionStorage.setItem('pp-updated', '1'); } catch (e) {} location.reload(); }
+      else setTimeout(tryReload, 1500);
+    };
+    tryReload();
+  };
+  let controlled = hadController; // the first takeover is just offline setup; any later one is an update
+  navigator.serviceWorker.addEventListener('controllerchange', () => { setOffline('ready'); if (controlled) applyUpdate(); controlled = true; });
+  const checkForUpdate = () => { if (swReg && navigator.onLine !== false) swReg.update().catch(() => {}); };
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').then(reg => {
+    navigator.serviceWorker.register('sw.js', {updateViaCache: 'none'}).then(reg => {
+      swReg = reg;
       navigator.serviceWorker.ready.then(() => { if (navigator.serviceWorker.controller) setOffline('ready'); });
     }).catch(() => setOffline('unsupported'));
   });
-  navigator.serviceWorker.addEventListener('controllerchange', () => setOffline('ready'));
+  // iPhone home-screen apps usually resume instead of relaunching, so check each time the app comes back.
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') checkForUpdate(); });
+  window.manualUpdateCheck = async () => {
+    if (navigator.onLine === false) return toast('Connect to the internet to check for an update');
+    busy('Checking for an update…');
+    try { if (swReg) await swReg.update(); } catch (e) {}
+    await new Promise(r => setTimeout(r, 2500));
+    busy();
+    if (reloadQueued) return; // the new version is installed and the app reloads into it now
+    try { sessionStorage.setItem('pp-checked', '1'); } catch (e) {}
+    location.reload();
+  };
 }
 
 /* ---------- storage (IndexedDB, memory fallback) ---------- */
 const DB = {
   db: null, mem: null,
+  failed: null,
   async init() {
+    if (!window.indexedDB) { this.useMemory('unavailable'); return; }
+    const slow = setTimeout(() => busy('Opening your saved projects…'), 2500);
     try {
-      if (!window.indexedDB) throw new Error('no idb');
       this.db = await new Promise((res, rej) => {
         const r = indexedDB.open('pinestone-punch-list', 1);
         r.onupgradeneeded = () => {
@@ -278,12 +324,13 @@ const DB = {
         };
         r.onsuccess = () => res(r.result);
         r.onerror = () => rej(r.error);
-        setTimeout(() => rej(new Error('timeout')), 8000);
+        r.onblocked = () => rej(new Error('blocked'));
       });
-    } catch (e) {
-      this.mem = {projects: new Map(), tasks: new Map(), photos: new Map()};
-    }
+      this.db.onversionchange = () => this.db.close();
+    } catch (e) { this.useMemory('failed'); }
+    clearTimeout(slow); busy();
   },
+  useMemory(reason) { this.failed = reason; this.mem = {projects: new Map(), tasks: new Map(), photos: new Map()}; },
   tx(store, mode, fn) {
     return new Promise((res, rej) => {
       const t = this.db.transaction(store, mode); const s = t.objectStore(store);
@@ -297,6 +344,24 @@ const DB = {
   del(store, id) { if (this.mem) { this.mem[store].delete(id); return Promise.resolve(); } return this.tx(store, 'readwrite', s => s.delete(id)); },
   byIndex(store, idx, v) { return this.mem ? Promise.resolve([...this.mem[store].values()].filter(o => o[idx] === v)) : this.tx(store, 'readonly', s => s.index(idx).getAll(v)); }
 };
+/* Storage warnings: shown at the top of every screen */
+function showStorageWarn(kind, html) {
+  const w = $('#storage-warn'); w.className = kind; w.innerHTML = html; w.hidden = false; document.body.classList.add('has-warn');
+}
+function storageError() {
+  showStorageWarn('err', '<b>Storage is not working.</b> Nothing you add right now will be saved. Your existing projects are not deleted — close the app completely and reopen it. <button data-act="reload">Reopen</button>');
+}
+async function checkStorageSpace() {
+  try {
+    if (!navigator.storage || !navigator.storage.estimate) return;
+    const {usage, quota} = await navigator.storage.estimate();
+    if (quota && usage / quota > 0.8) showStorageWarn('low', `<b>Storage almost full (${Math.round(usage / quota * 100)}%).</b> Back up finished projects, then remove them from the app.`);
+  } catch (e) {}
+}
+function saveFailed(e) {
+  const full = e && (e.name === 'QuotaExceededError' || /quota|space/i.test(e.message || ''));
+  return ask(`This was NOT saved. ${full ? 'The phone is out of storage space for this app.' : 'The phone\'s storage could not be written to.'} Back up your projects, ${full ? 'free up space on the phone' : 'close the app completely and reopen it'}, then try again.`, 'OK', {cancel: null});
+}
 let persistAsked = false;
 function askPersist() { if (persistAsked) return; persistAsked = true; try { navigator.storage && navigator.storage.persist && navigator.storage.persist().catch(() => {}); } catch (e) {} }
 
@@ -319,6 +384,14 @@ function ask(msg, ok = 'OK', {danger = false, cancel = 'Cancel'} = {}) {
     d.onclick = e => { const b = e.target.closest('[data-r]'); if (!b) return; d.hidden = true; d.onclick = null; res(b.dataset.r === '1'); };
   });
 }
+function choose(msg, buttons) {
+  return new Promise(res => {
+    const d = $('#dialog');
+    d.innerHTML = `<div class="dbox"><p>${msg}</p><div class="${buttons.length === 3 ? 'row3' : buttons.length === 2 ? 'row2' : 'stack'}">${buttons.map((b, i) => `<button class="btn ${b.primary ? 'primary' : ''}" data-r="${i}">${esc(b.label)}</button>`).join('')}</div></div>`;
+    d.hidden = false;
+    d.onclick = e => { const b = e.target.closest('[data-r]'); if (!b) return; d.hidden = true; d.onclick = null; res(buttons[+b.dataset.r].value); };
+  });
+}
 function openSheet(html) { const s = $('#sheet'); s.innerHTML = html; s.hidden = false; s.scrollTop = 0; document.body.style.overflow = 'hidden'; }
 function closeSheet() { const s = $('#sheet'); s.hidden = true; s.innerHTML = ''; document.body.style.overflow = ''; D = null; }
 
@@ -332,6 +405,17 @@ async function fillThumbs(root) {
 }
 
 /* ---------- render ---------- */
+/* Backup status per project */
+const DAY = 86400000;
+function ago(t) { const d = Math.floor((new Date().setHours(0, 0, 0, 0) - new Date(t).setHours(0, 0, 0, 0)) / DAY); return d <= 0 ? 'today' : d === 1 ? 'yesterday' : `${d} days ago`; }
+function backupStatus(p) {
+  const ts = projTasks(p.id); const at = p.backedUpAt || 0;
+  const changed = ts.filter(t => (t.updatedAt || t.createdAt || 0) > at).length;
+  const dirty = ts.length > 0 && (!at || (p.updatedAt || 0) > at);
+  const need = dirty && (!at || Date.now() - at > DAY || changed >= 10);
+  const text = !at ? (ts.length ? 'Not backed up yet' : 'No items yet') : `Last backup: ${ago(at)}${dirty ? ` · ${changed ? changed + ' item' + (changed > 1 ? 's' : '') : 'changes'} changed since` : ''}`;
+  return {need, dirty, text};
+}
 function render() {
   if (S.view === 'project' && cur()) renderProject(); else { S.view = 'home'; renderHome(); }
   lsSet('pp-view', {view: S.view, pid: S.pid});
@@ -341,15 +425,14 @@ function renderHome() {
   const list = S.projects.slice().sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
   $('#app').innerHTML = `
     <header class="top">${brand('lg')}<h1>Punch List</h1></header>
-    ${DB.mem ? `<div class="warn">This browser is blocking storage on this page, so anything you add will be lost when you close it. Open the app in a regular browser tab to save your work.</div>` : ''}
     <button class="btn primary big" data-act="new-project">${ICON.plus} New Project</button>
     ${list.length ? `<ul class="plist">${list.map(p => {
       const ts = projTasks(p.id); const open = ts.filter(t => t.status !== 'done').length;
-      return `<li><button class="prow" data-act="open-project" data-id="${p.id}"><span class="pname">${esc(p.name)}</span>${p.address ? `<span class="paddr">${esc(p.address)}</span>` : ''}<span class="pcount">${open} open · ${ts.length} total</span></button></li>`;
+      return `<li><button class="prow" data-act="open-project" data-id="${p.id}"><span class="pname">${esc(p.name)}</span>${p.address ? `<span class="paddr">${esc(p.address)}</span>` : ''}<span class="pcount">${open} open · ${ts.length} total${backupStatus(p).need ? ' · <span class="pneed">Needs backup</span>' : ''}</span></button></li>`;
     }).join('')}</ul>` : `<p class="empty">No projects yet. Create one to start a walkthrough.</p>`}
     <section class="notice">
       <h3>Your data is saved on this device only</h3>
-      <p>Projects and photos are stored in this browser. They do not sync to your other phones or computers, and they can be erased if browser data is cleared or in private browsing. Back up regularly and keep the file somewhere safe.</p>
+      <p>Projects and photos are stored in this app on this phone. They do not sync to your other devices, and deleting the app's home screen icon can erase them. Back up each project after a walkthrough and save it to Files (iCloud Drive).</p>
       <div class="row2"><button class="btn" data-act="backup-all" ${list.length ? '' : 'disabled'}>Back Up All</button><button class="btn" data-act="restore">Restore Backup</button></div>
       ${offlineLine()}
     </section>`;
@@ -372,6 +455,7 @@ function renderProject() {
       <button class="btn primary big" data-act="add-task">${ICON.plus} Add Item</button>
       <button class="btn big" data-act="export" ${all.length ? '' : 'disabled'}>${ICON.doc} PDF / Print</button>
     </div>
+    ${all.length ? (() => { const b = backupStatus(p); return `<div class="bk ${b.need ? 'need' : ''}"><span>${b.text}</span><button data-act="backup-project">Back Up</button></div>`; })() : ''}
     ${all.length ? `<div class="filters">
       <select data-filter="room" class="${f.room ? 'on' : ''}" aria-label="Room">${opt('', 'All rooms', f.room)}${rooms.map(r => opt(r, r, f.room)).join('')}</select>
       <select data-filter="trade" class="${f.trade ? 'on' : ''}" aria-label="Trade">${opt('', 'All trades', f.trade)}${trades.map(r => opt(r, r, f.trade)).join('')}</select>
@@ -412,7 +496,7 @@ async function saveProject(isNew) {
   const now = Date.now(); let p;
   if (isNew) { p = {id: uid(), name, address, nextNum: 1, createdAt: now, updatedAt: now}; S.projects.push(p); }
   else { p = cur(); Object.assign(p, {name, address, updatedAt: now}); }
-  try { await DB.put('projects', p); } catch (e) { return toast('Could not save: ' + e.message); }
+  try { await DB.put('projects', p); } catch (e) { return saveFailed(e); }
   askPersist();
   closeSheet(); S.pid = p.id; S.view = 'project'; S.filters = {room: '', trade: '', status: ''}; render();
 }
@@ -491,7 +575,7 @@ async function saveTask(next) {
     await DB.put('tasks', t);
     if (!D.id) { S.tasks.push(t); p.nextNum = (p.nextNum || 1) + 1; }
     p.updatedAt = now; await DB.put('projects', p);
-  } catch (e) { return toast('Could not save: ' + (e.message || e)); }
+  } catch (e) { return saveFailed(e); }
   askPersist();
   S.last = {room: t.room, trade: t.trade}; lsSet('pp-last', S.last);
   render();
@@ -501,7 +585,7 @@ async function saveTask(next) {
 async function toggleTask(id) {
   const t = S.tasks.find(x => x.id === id); if (!t) return;
   t.status = t.status === 'done' ? 'open' : 'done'; t.completedAt = t.status === 'done' ? Date.now() : null; t.updatedAt = Date.now();
-  try { await DB.put('tasks', t); await touchProject(); } catch (e) { toast('Could not save: ' + e.message); }
+  try { await DB.put('tasks', t); await touchProject(); } catch (e) { saveFailed(e); }
   render(); toast(t.status === 'done' ? `Item ${t.num} complete` : `Item ${t.num} reopened`);
 }
 async function deleteTask() {
@@ -554,13 +638,13 @@ async function viewPhoto(id) {
 /* ---------- report model (shared by PDF and print) ---------- */
 function buildReport(p, opt) {
   let tasks = projTasks(p.id);
-  let label = 'Full Project Punch List';
-  if (opt.type === 'trade') { tasks = tasks.filter(t => (t.trade || 'Unassigned') === opt.trade); label = `${opt.trade} Punch List`; if (opt.openOnly) tasks = tasks.filter(t => t.status !== 'done'); }
-  if (opt.type === 'open') { tasks = tasks.filter(t => t.status !== 'done'); label = 'Outstanding Items'; }
+  let label = 'Full Project Punch List', shortLabel = 'Full Project';
+  if (opt.type === 'trade') { tasks = tasks.filter(t => (t.trade || 'Unassigned') === opt.trade); label = `${opt.trade} Punch List`; shortLabel = opt.openOnly ? 'Trade List · Outstanding' : 'Trade List'; if (opt.openOnly) tasks = tasks.filter(t => t.status !== 'done'); }
+  if (opt.type === 'open') { tasks = tasks.filter(t => t.status !== 'done'); label = 'Outstanding Items'; shortLabel = 'Outstanding Items Only'; }
   const key = t => (t.room || '').trim();
   tasks.sort((a, b) => { const ra = key(a), rb = key(b); if (!ra !== !rb) return ra ? -1 : 1; return ra.localeCompare(rb, undefined, {sensitivity: 'base'}) || a.num - b.num; });
   const groups = []; for (const t of tasks) { const r = key(t) || 'No Room Listed'; let g = groups[groups.length - 1]; if (!g || g.room !== r) groups.push(g = {room: r, items: []}); g.items.push(t); }
-  return {p, opt, label, tasks, groups, date: Date.now(), open: tasks.filter(t => t.status !== 'done').length,
+  return {p, opt, label, shortLabel, tasks, groups, date: Date.now(), open: tasks.filter(t => t.status !== 'done').length,
           photoTasks: tasks.filter(t => (t.photoIds || []).length), showTrade: opt.type !== 'trade'};
 }
 function metaFor(R, t) {
@@ -598,17 +682,35 @@ function wrap(s, size, b, maxW) {
   return lines.length ? lines : [''];
 }
 function fit(s, size, b, maxW) { s = String(s || ''); if (tw(s, size, b) <= maxW) return s; while (s.length && tw(s + '…', size, b) > maxW) s = s.slice(0, -1); return s.trimEnd() + '…'; }
+const svgc = g => { const v = Math.round(g * 255); return `rgb(${v},${v},${v})`; };
 class Pg {
-  constructor() { this.o = []; this.imgs = []; }
-  t(x, y, s, size, {b = false, g = 0.15, cs = 0} = {}) { this.o.push(`BT /${b ? 'F2' : 'F1'} ${nn(size)} Tf ${cs ? nn(cs) + ' Tc ' : ''}${nn(g)} g 1 0 0 1 ${nn(x)} ${nn(PH - y)} Tm ${pstr(enc(s))} Tj${cs ? ' 0 Tc' : ''} ET`); }
+  constructor() { this.o = []; this.s = []; this.imgs = []; }
+  t(x, y, s, size, {b = false, g = 0.15, cs = 0} = {}) {
+    this.o.push(`BT /${b ? 'F2' : 'F1'} ${nn(size)} Tf ${cs ? nn(cs) + ' Tc ' : ''}${nn(g)} g 1 0 0 1 ${nn(x)} ${nn(PH - y)} Tm ${pstr(enc(s))} Tj${cs ? ' 0 Tc' : ''} ET`);
+    this.s.push(`<text x="${nn(x)}" y="${nn(y)}" font-size="${nn(size)}"${b ? ' font-weight="700"' : ''} fill="${svgc(g)}"${cs ? ` letter-spacing="${nn(cs)}"` : ''}>${esc(s)}</text>`);
+  }
   tr(xr, y, s, size, o = {}) { this.t(xr - tw(s, size, o.b, o.cs || 0), y, s, size, o); }
-  ln(x1, y1, x2, y2, w = 0.5, g = 0.8) { this.o.push(`${nn(g)} G ${nn(w)} w ${nn(x1)} ${nn(PH - y1)} m ${nn(x2)} ${nn(PH - y2)} l S`); }
+  ln(x1, y1, x2, y2, w = 0.5, g = 0.8) {
+    this.o.push(`${nn(g)} G ${nn(w)} w ${nn(x1)} ${nn(PH - y1)} m ${nn(x2)} ${nn(PH - y2)} l S`);
+    this.s.push(`<line x1="${nn(x1)}" y1="${nn(y1)}" x2="${nn(x2)}" y2="${nn(y2)}" stroke="${svgc(g)}" stroke-width="${nn(w)}"/>`);
+  }
   rect(x, y, w, h, {fill = null, stroke = null, lw = 0.75} = {}) {
     let s = ''; if (fill != null) s += `${nn(fill)} g `; if (stroke != null) s += `${nn(stroke)} G ${nn(lw)} w `;
     this.o.push(s + `${nn(x)} ${nn(PH - y - h)} ${nn(w)} ${nn(h)} re ` + (fill != null && stroke != null ? 'B' : fill != null ? 'f' : 'S'));
+    this.s.push(`<rect x="${nn(x)}" y="${nn(y)}" width="${nn(w)}" height="${nn(h)}" fill="${fill != null ? svgc(fill) : 'none'}"${stroke != null ? ` stroke="${svgc(stroke)}" stroke-width="${nn(lw)}"` : ''}/>`);
   }
-  check(x, y, s) { this.o.push(`0.15 G 1.4 w 1 J 1 j ${nn(x + s * .2)} ${nn(PH - y - s * .52)} m ${nn(x + s * .42)} ${nn(PH - y - s * .76)} l ${nn(x + s * .82)} ${nn(PH - y - s * .24)} l S 0 J 0 j`); }
-  img(name, x, y, w, h) { this.o.push(`q ${nn(w)} 0 0 ${nn(h)} ${nn(x)} ${nn(PH - y - h)} cm /${name} Do Q`); this.imgs.push(name); }
+  check(x, y, s) {
+    this.o.push(`0.15 G 1.4 w 1 J 1 j ${nn(x + s * .2)} ${nn(PH - y - s * .52)} m ${nn(x + s * .42)} ${nn(PH - y - s * .76)} l ${nn(x + s * .82)} ${nn(PH - y - s * .24)} l S 0 J 0 j`);
+    this.s.push(`<polyline points="${nn(x + s * .2)},${nn(y + s * .52)} ${nn(x + s * .42)},${nn(y + s * .76)} ${nn(x + s * .82)},${nn(y + s * .24)}" fill="none" stroke="${svgc(0.15)}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>`);
+  }
+  img(name, x, y, w, h) {
+    this.o.push(`q ${nn(w)} 0 0 ${nn(h)} ${nn(x)} ${nn(PH - y - h)} cm /${name} Do Q`); this.imgs.push(name);
+    this.s.push({name, x, y, w, h});
+  }
+  svg(urls) {
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${PW} ${PH}" font-family="Helvetica, Arial, 'Liberation Sans', sans-serif" style="white-space:pre"><rect width="${PW}" height="${PH}" fill="#fff"/>` +
+      this.s.map(e => typeof e === 'string' ? e : `<image href="${urls[e.name]}" x="${nn(e.x)}" y="${nn(e.y)}" width="${nn(e.w)}" height="${nn(e.h)}" preserveAspectRatio="none"/>`).join('') + '</svg>';
+  }
 }
 const latin1 = s => { const a = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) a[i] = s.charCodeAt(i) & 255; return a; };
 function writePdf(pages, images, title) {
@@ -624,7 +726,7 @@ function writePdf(pages, images, title) {
   obj(4, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
   obj(5, `<< /Title ${pstr(enc(title))} /Author (Pinestone Development) /Producer (Pinestone Punch List) >>`);
   for (const [name, im] of images) obj(imgNum[name], () => {
-    push(`<< /Type /XObject /Subtype /Image /Width ${im.w} /Height ${im.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${im.bytes.length} >>\nstream\n`);
+    push(`<< /Type /XObject /Subtype /Image /Width ${im.w} /Height ${im.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /${im.filter || 'DCTDecode'} /Length ${im.bytes.length} >>\nstream\n`);
     push(im.bytes); push('\nendstream');
   });
   pages.forEach((pg, i) => {
@@ -642,59 +744,87 @@ function writePdf(pages, images, title) {
 }
 
 const SIGN_TEXT = 'By signing below, the parties confirm that the items on this punch list have been completed to the satisfaction of Pinestone Development.';
-async function makePdf(R) {
+/* One page layout feeds both the PDF and the print view, so they always match. */
+async function layoutDoc(R) {
   const p = R.p; const pages = []; let pg, y;
   let logo = null; try { logo = await logoJpeg(); } catch (e) { logo = null; }
-  const bottom = PH - MB;
-  const DX = ML + 50, DW = PW - MR - DX;
+  const images = new Map(); if (logo) images.set('Logo', logo);
+  const bottom = PH - 58;
+  const DX = ML + 60, DW = PW - MR - DX;
+  const INK = 0.15, MUTED = 0.42, LABEL = 0.5, HAIR = 0.82;
+
+  const label = (x, yy, s, o = {}) => pg.t(x, yy, s, 6.6, {b: true, cs: 1.1, g: LABEL, ...o});
+  const tableHeader = () => {
+    label(ML, y + 9, 'DONE'); label(ML + 30, y + 9, 'NO.'); label(DX, y + 9, 'ITEM  ·  TRADE  ·  NOTES');
+    y += 14; pg.ln(ML, y, PW - MR, y, 0.6, 0.7); y += 2;
+  };
   const firstHeader = () => {
-    let ruleY = MT + 20;
-    if (logo) {
-      const b = logoBox(230, LOGO.jpeg.w / LOGO.jpeg.h >= 3 ? 34 : 46);
-      pg.img('Logo', ML, MT - 8, b.w, b.h); ruleY = MT - 8 + b.h + 9;
-    } else {
-      pg.t(ML, MT + 11, 'PINESTONE', 12.5, {b: true, cs: 2.4});
-      pg.t(ML + tw('PINESTONE', 12.5, true, 2.4) + 5, MT + 11, 'DEVELOPMENT', 12.5, {cs: 2.4, g: 0.35});
+    const top = 38; let hh;
+    if (logo) { const b = logoBox(162, 115); pg.img('Logo', ML, top, b.w, b.h); hh = b.h; }
+    else {
+      pg.t(ML, top + 20, 'PINESTONE', 17, {b: true, cs: 3.2});
+      pg.t(ML, top + 36, 'DEVELOPMENT', 9.5, {cs: 4.6, g: MUTED}); hh = 40;
     }
-    pg.tr(PW - MR, ruleY - 9.5, 'PUNCH LIST', 8.5, {b: true, cs: 1.5, g: 0.35});
-    pg.ln(ML, ruleY, PW - MR, ruleY, 1.2, 0.15);
-    y = ruleY + 30;
-    for (const l of wrap(p.name, 19, true, CW).slice(0, 2)) { pg.t(ML, y, l, 19, {b: true}); y += 22; }
-    if (p.address) { pg.t(ML, y - 4, fit(p.address, 10, false, CW), 10, {g: 0.4}); y += 12; }
-    y += 10;
-    const cols = [['LIST', R.label], ['DATE', fmtDate(R.date)], ['ITEMS', `${R.tasks.length} total · ${R.open} open`]];
-    const colW = [CW * 0.42, CW * 0.31, CW * 0.27]; let x = ML;
-    cols.forEach(([k, v], i) => { pg.t(x, y, k, 6.8, {b: true, cs: 1, g: 0.5}); pg.t(x, y + 13, fit(v, 10, false, colW[i] - 10), 10); x += colW[i]; });
-    y += 22;
-    if (R.opt.type === 'trade') { y += 14; pg.t(ML, y, 'Subcontractor:', 10); pg.ln(ML + 72, y + 2, ML + 330, y + 2, 0.6, 0.55); y += 4; }
-    y += 10; pg.ln(ML, y, PW - MR, y, 0.6, 0.8); y += 8;
+    const blockH = Math.max(hh, 44), base = top + blockH;
+    pg.tr(PW - MR, base - 17, 'PUNCH LIST', 21, {b: true, cs: 2.6});
+    pg.tr(PW - MR, base - 2, R.shortLabel.toUpperCase(), 7.5, {b: true, cs: 1.3, g: MUTED});
+    y = base + 11; pg.ln(ML, y, PW - MR, y, 1.6, INK); y += 14;
+
+    // project information panel
+    const rowH = 48, c = [CW * 0.46, CW * 0.2, CW * 0.17, CW * 0.17];
+    const trade = R.opt.type === 'trade', boxH = rowH + (trade ? 36 : 0);
+    pg.rect(ML, y, CW, boxH, {stroke: 0.78, lw: 0.7});
+    let x = ML;
+    const cells = [['PROPERTY'], ['DATE ISSUED', fmtDate(R.date)], ['TOTAL ITEMS', String(R.tasks.length)], ['OPEN ITEMS', String(R.open)]];
+    cells.forEach(([k, v], i) => {
+      if (i) pg.ln(x, y, x, y + rowH, 0.7, 0.78);
+      label(x + 9, y + 14, k);
+      if (i === 0) {
+        pg.t(x + 9, y + 30, fit(p.name, 12, true, c[0] - 18), 12, {b: true});
+        if (p.address) pg.t(x + 9, y + 41, fit(p.address, 8.5, false, c[0] - 18), 8.5, {g: MUTED});
+      } else pg.t(x + 9, y + 31, fit(v, i === 1 ? 10 : 13, i > 1, c[i] - 18), i === 1 ? 10 : 13, {b: i > 1});
+      x += c[i];
+    });
+    if (trade) {
+      const yy = y + rowH; pg.ln(ML, yy, PW - MR, yy, 0.7, 0.78);
+      const t1 = CW * 0.3, t2 = CW * 0.4;
+      label(ML + 9, yy + 13, 'TRADE'); pg.t(ML + 9, yy + 27, fit(R.opt.trade, 10, true, t1 - 18), 10, {b: true});
+      pg.ln(ML + t1, yy, ML + t1, yy + 36, 0.7, 0.78); label(ML + t1 + 9, yy + 13, 'SUBCONTRACTOR');
+      pg.ln(ML + t1 + t2, yy, ML + t1 + t2, yy + 36, 0.7, 0.78); label(ML + t1 + t2 + 9, yy + 13, 'PHONE');
+    }
+    y += boxH + 20;
+    tableHeader();
   };
-  const runHeader = () => {
-    if (logo) { const b = logoBox(110, 13); pg.img('Logo', ML, MT + 7 - b.h, b.w, b.h); }
-    else pg.t(ML, MT + 4, 'PINESTONE DEVELOPMENT', 7.5, {b: true, cs: 1.5});
-    pg.tr(PW - MR, MT + 4, fit(`${p.name}  —  ${R.label}`, 8, false, CW - 160), 8, {g: 0.4});
-    pg.ln(ML, MT + 11, PW - MR, MT + 11, 0.6, 0.75);
-    y = MT + 22;
+  const runHeader = (withTable) => {
+    const top = 36;
+    let hh = 12;
+    if (logo) { const b = logoBox(118, 26); pg.img('Logo', ML, top, b.w, b.h); hh = b.h; }
+    else pg.t(ML, top + 10, 'PINESTONE DEVELOPMENT', 8, {b: true, cs: 1.8});
+    pg.tr(PW - MR, top + hh - 1, fit(`${p.name}  ·  ${R.label}`, 8, false, CW - 170), 8, {g: MUTED});
+    y = top + hh + 8; pg.ln(ML, y, PW - MR, y, 1, INK); y += 14;
+    if (withTable) tableHeader();
   };
-  const newPage = first => { pg = new Pg(); pages.push(pg); first ? firstHeader() : runHeader(); };
+  const newPage = (first, withTable = true) => { pg = new Pg(); pages.push(pg); first ? firstHeader() : runHeader(withTable); };
   const rowLayout = t => { const lines = wrap(t.desc || '(photo only — see appendix)', 10.5, false, DW); const meta = metaFor(R, t); return {lines, meta, h: 19 + (lines.length - 1) * 14 + (meta ? 13 : 2) + 40 + 10}; };
   const groupHeader = (g, cont) => {
-    pg.rect(ML, y + 6, CW, 19, {fill: 0.95});
-    pg.t(ML + 8, y + 19, (g.room + (cont ? ' (continued)' : '')).toUpperCase(), 8, {b: true, cs: 1, g: 0.25});
-    pg.tr(PW - MR - 8, y + 19, `${g.items.length} item${g.items.length > 1 ? 's' : ''}`, 8, {g: 0.5});
-    y += 25;
+    pg.rect(ML, y + 7, CW, 19, {fill: 0.948});
+    pg.rect(ML, y + 7, 2.5, 19, {fill: INK});
+    pg.t(ML + 11, y + 19.8, (g.room + (cont ? ' (continued)' : '')).toUpperCase(), 7.8, {b: true, cs: 1.3, g: 0.2});
+    pg.tr(PW - MR - 9, y + 19.8, `${g.items.length} item${g.items.length > 1 ? 's' : ''}`, 7.8, {g: LABEL});
+    y += 26;
   };
   const row = (t, L) => {
     const top = y, done = t.status === 'done';
-    pg.rect(ML + 2, top + 10, 11, 11, {stroke: 0.3, lw: 0.9}); if (done) pg.check(ML + 2, top + 10, 11);
-    pg.t(ML + 20, top + 19, t.num + '.', 10.5, {b: true});
-    L.lines.forEach((l, i) => pg.t(DX, top + 19 + i * 14, l, 10.5, {g: done ? 0.45 : 0.15}));
+    pg.rect(ML + 4, top + 10, 11, 11, {stroke: 0.25, lw: 0.9}); if (done) pg.check(ML + 4, top + 10, 11);
+    pg.t(ML + 30, top + 19, t.num + '.', 10.5, {b: true});
+    L.lines.forEach((l, i) => pg.t(DX, top + 19 + i * 14, l, 10.5, {g: done ? 0.45 : INK}));
     let yy = top + 19 + (L.lines.length - 1) * 14;
-    if (L.meta) { yy += 13; pg.t(DX, yy, L.meta, 8.3, {g: 0.45}); } else yy += 2;
-    pg.t(ML + 20, yy + 19, 'NOTES', 6.3, {b: true, cs: 0.8, g: 0.6});
-    pg.ln(DX, yy + 20, PW - MR, yy + 20, 0.5, 0.82); pg.ln(DX, yy + 40, PW - MR, yy + 40, 0.5, 0.82);
+    if (L.meta) { yy += 13; pg.t(DX, yy, L.meta, 8.2, {g: MUTED}); } else yy += 2;
+    pg.t(ML + 30, yy + 19, 'NOTES', 6, {b: true, cs: 0.9, g: 0.6});
+    pg.ln(DX, yy + 20, PW - MR, yy + 20, 0.5, HAIR); pg.ln(DX, yy + 40, PW - MR, yy + 40, 0.5, HAIR);
     y = top + L.h; pg.ln(ML, y, PW - MR, y, 0.6, 0.86);
   };
+  const sectionTitle = (s) => { pg.t(ML, y, s, 8.5, {b: true, cs: 1.6}); y += 6; pg.ln(ML, y, PW - MR, y, 0.8, INK); y += 14; };
 
   newPage(true);
   if (!R.tasks.length) { pg.t(ML, y + 24, 'No items on this list.', 11, {g: 0.45}); y += 40; }
@@ -702,48 +832,46 @@ async function makePdf(R) {
     let first = true;
     for (const t of g.items) {
       const L = rowLayout(t);
-      if (first) { if (y + 25 + L.h > bottom) newPage(false); groupHeader(g, false); first = false; }
+      if (first) { if (y + 26 + L.h > bottom) newPage(false); groupHeader(g, false); first = false; }
       else if (y + L.h > bottom) { newPage(false); groupHeader(g, true); }
       row(t, L);
     }
   }
   if (R.opt.sign) {
     const st = wrap(SIGN_TEXT, 8.5, false, CW);
-    const h = 30 + st.length * 11 + 2 * 46;
-    if (y + h > bottom) newPage(false);
-    y += 28; pg.t(ML, y, 'COMPLETION SIGN-OFF', 8.5, {b: true, cs: 1.2}); y += 14;
-    st.forEach(l => { pg.t(ML, y, l, 8.5, {g: 0.4}); y += 11; });
+    const h = 34 + 20 + st.length * 11 + 2 * 48;
+    if (y + h > bottom) newPage(false, false);
+    y += 34; sectionTitle('COMPLETION SIGN-OFF');
+    st.forEach(l => { pg.t(ML, y, l, 8.5, {g: MUTED}); y += 11; });
     for (const who of ['Subcontractor name / company', 'Pinestone Development representative']) {
-      y += 34; const c1 = CW * 0.42, c2 = CW * 0.38;
-      pg.ln(ML, y, ML + c1 - 14, y, 0.7, 0.3); pg.ln(ML + c1, y, ML + c1 + c2 - 14, y, 0.7, 0.3); pg.ln(ML + c1 + c2, y, PW - MR, y, 0.7, 0.3);
-      pg.t(ML, y + 10, who, 7.3, {g: 0.45}); pg.t(ML + c1, y + 10, 'Signature', 7.3, {g: 0.45}); pg.t(ML + c1 + c2, y + 10, 'Date', 7.3, {g: 0.45});
-      y += 12;
+      y += 34; const c1 = CW * 0.44, c2 = CW * 0.36;
+      pg.ln(ML, y, ML + c1 - 16, y, 0.7, 0.3); pg.ln(ML + c1, y, ML + c1 + c2 - 16, y, 0.7, 0.3); pg.ln(ML + c1 + c2, y, PW - MR, y, 0.7, 0.3);
+      label(ML, y + 11, who.toUpperCase(), {cs: 0.8}); label(ML + c1, y + 11, 'SIGNATURE', {cs: 0.8}); label(ML + c1 + c2, y + 11, 'DATE', {cs: 0.8});
+      y += 14;
     }
   }
-  const images = new Map();
-  if (logo) images.set('Logo', logo);
   if (R.opt.photos && R.photoTasks.length) {
-    newPage(false);
-    pg.t(ML, y + 14, 'Photo Appendix', 15, {b: true});
-    pg.t(ML, y + 29, 'Photos are labeled with the matching item number from the punch list.', 8.5, {g: 0.45});
-    y += 44;
-    const gap = 18, cw2 = (CW - gap) / 2, boxH = 168, cellH = 26 + boxH + 16;
-    let col = 0, k = 0, total = R.photoTasks.reduce((s, t) => s + t.photoIds.length, 0), doneN = 0;
+    newPage(false, false);
+    y += 6; sectionTitle('PHOTO APPENDIX');
+    pg.t(ML, y - 2, 'Each photo is labeled with the matching item number from the punch list.', 8.5, {g: MUTED});
+    y += 14;
+    const gap = 18, cw2 = (CW - gap) / 2, boxH = 172, cellH = 28 + boxH + 18;
+    let col = 0, k = 0, doneN = 0; const total = R.photoTasks.reduce((s, t) => s + t.photoIds.length, 0);
     for (const t of R.photoTasks) {
       for (let i = 0; i < t.photoIds.length; i++) {
         busy(`Adding photos… ${++doneN} of ${total}`);
         const rec = await DB.get('photos', t.photoIds[i]); if (!rec) continue;
-        if (col === 0 && y + cellH > bottom) newPage(false);
+        if (col === 0 && y + cellH > bottom) { newPage(false, false); }
         const x = ML + col * (cw2 + gap);
         const cap = `${t.num}.  ${t.room || ''}${t.room && t.trade ? '  ·  ' : ''}${t.trade || ''}` + (t.photoIds.length > 1 ? `   (${i + 1} of ${t.photoIds.length})` : '');
         pg.t(x, y + 9, fit(cap, 8.5, true, cw2), 8.5, {b: true});
-        pg.t(x, y + 20, fit(t.desc || '', 8, false, cw2), 8, {g: 0.45});
-        const bx = y + 26;
-        pg.rect(x, bx, cw2, boxH, {fill: 0.975, stroke: 0.82, lw: 0.6});
+        pg.t(x, y + 21, fit(t.desc || '', 8, false, cw2), 8, {g: MUTED});
+        const bx = y + 28;
+        pg.rect(x, bx, cw2, boxH, {fill: 0.975, stroke: HAIR, lw: 0.6});
         try {
           const img = await loadImage(rec.blob); const j = await canvasJpeg(img, 1100, 0.78);
           const name = 'Im' + (++k); images.set(name, {bytes: new Uint8Array(await j.blob.arrayBuffer()), w: j.w, h: j.h});
-          const s = Math.min((cw2 - 8) / j.w, (boxH - 8) / j.h); const iw = j.w * s, ih = j.h * s;
+          const sc = Math.min((cw2 - 8) / j.w, (boxH - 8) / j.h); const iw = j.w * sc, ih = j.h * sc;
           pg.img(name, x + (cw2 - iw) / 2, bx + (boxH - ih) / 2, iw, ih);
         } catch (e) { pg.t(x + 10, bx + 20, 'Photo could not be read', 8, {g: 0.5}); }
         if (col === 1) { col = 0; y += cellH; } else col = 1;
@@ -751,47 +879,29 @@ async function makePdf(R) {
     }
   }
   pages.forEach((p2, i) => {
-    p2.ln(ML, PH - 46, PW - MR, PH - 46, 0.5, 0.85);
-    p2.t(ML, PH - 34, 'Pinestone Development  ·  pinestone-development.com', 7.5, {g: 0.5});
-    p2.tr(PW - MR, PH - 34, `Page ${i + 1} of ${pages.length}`, 7.5, {g: 0.5});
+    p2.ln(ML, PH - 42, PW - MR, PH - 42, 0.5, HAIR);
+    p2.t(ML, PH - 29, 'PINESTONE DEVELOPMENT', 6.8, {b: true, cs: 1.8, g: LABEL});
+    p2.tr(PW - MR, PH - 29, `Page ${i + 1} of ${pages.length}`, 7.5, {g: LABEL});
   });
-  return {blob: writePdf(pages, images, `${p.name} — ${R.label}`), pages: pages.length};
+  return {pages, images};
+}
+async function makePdf(R) {
+  const {pages, images} = await layoutDoc(R);
+  return {blob: writePdf(pages, images, `${R.p.name} — ${R.label}`), pages: pages.length};
 }
 
-/* ---------- print layout (HTML) ---------- */
+/* ---------- print view: the same pages as the PDF, drawn as page-sized images, no browser margins ---------- */
 async function buildPrint(R) {
-  const p = R.p; const urls = [];
-  let html = `<div class="pr-head">${LOGO.ok ? '<img class="pr-logo" src="logo.png" alt="Pinestone Development">' : '<div class="pr-brand">PINESTONE <span>DEVELOPMENT</span></div>'}<div class="pr-kind">PUNCH LIST</div></div>
-    <div class="pr-name">${esc(p.name)}</div>${p.address ? `<div class="pr-addr">${esc(p.address)}</div>` : ''}
-    <div class="pr-info"><div><small>LIST</small>${esc(R.label)}</div><div><small>DATE</small>${fmtDate(R.date)}</div><div><small>ITEMS</small>${R.tasks.length} total · ${R.open} open</div></div>
-    ${R.opt.type === 'trade' ? '<div class="pr-sub">Subcontractor:<span></span></div>' : ''}`;
-  if (!R.tasks.length) html += '<div class="pr-empty">No items on this list.</div>';
-  for (const g of R.groups) {
-    html += `<div class="pr-group">${esc(g.room)}<span>${g.items.length} item${g.items.length > 1 ? 's' : ''}</span></div>`;
-    for (const t of g.items) {
-      const meta = metaFor(R, t);
-      html += `<div class="pr-row ${t.status === 'done' ? 'done' : ''}"><div class="pr-cb"></div><div class="pr-num">${t.num}.</div>
-        <div><div class="pr-desc">${esc(t.desc || '(photo only — see appendix)')}</div>${meta ? `<div class="pr-meta">${esc(meta)}</div>` : ''}</div>
-        <div class="pr-notes"><small>NOTES</small><div></div><div></div></div></div>`;
-    }
+  const {pages, images} = await layoutDoc(R);
+  const urls = {}; const made = [];
+  for (const [name, im] of images) {
+    if (name === 'Logo') { urls[name] = LOGO.png || 'logo.png'; continue; }
+    const u = URL.createObjectURL(new Blob([im.bytes], {type: 'image/jpeg'})); urls[name] = u; made.push(u);
   }
-  if (R.opt.sign) html += `<div class="pr-sign"><h4>COMPLETION SIGN-OFF</h4><p>${esc(SIGN_TEXT)}</p>
-    <div class="pr-sigrow"><div>Subcontractor name / company</div><div>Signature</div><div>Date</div></div>
-    <div class="pr-sigrow"><div>Pinestone Development representative</div><div>Signature</div><div>Date</div></div></div>`;
-  if (R.opt.photos && R.photoTasks.length) {
-    html += `<div class="pr-app"><h2>Photo Appendix</h2><p>Photos are labeled with the matching item number from the punch list.</p><div class="pr-grid">`;
-    for (const t of R.photoTasks) for (let i = 0; i < t.photoIds.length; i++) {
-      const rec = await DB.get('photos', t.photoIds[i]); if (!rec) continue;
-      const u = URL.createObjectURL(rec.blob); urls.push(u);
-      html += `<div class="pr-cell"><b>${t.num}. ${esc([t.room, t.trade].filter(Boolean).join(' · '))}${t.photoIds.length > 1 ? ` (${i + 1} of ${t.photoIds.length})` : ''}</b><small>${esc(t.desc)}</small><div><img src="${u}" alt=""></div></div>`;
-    }
-    html += '</div></div>';
-  }
-  const root = $('#print-root'); root.innerHTML = html;
-  const runTitle = `${p.name} — ${R.label}`.replace(/["\\]/g, '');
-  $('#print-dyn').textContent = `@media print{@page{@top-right{content:"${runTitle}";font:8pt Helvetica,Arial,sans-serif;color:#666}}@page:first{@top-right{content:none}}}`;
-  await Promise.all([...root.querySelectorAll('img')].map(i => i.decode ? i.decode().catch(() => {}) : null));
-  return () => { urls.forEach(u => URL.revokeObjectURL(u)); };
+  const root = $('#print-root');
+  root.innerHTML = pages.map(pg => pg.svg(urls)).join('');
+  await Promise.all(Object.values(urls).map(u => { const i = new Image(); i.src = u; return i.decode ? i.decode().catch(() => {}) : null; }));
+  return () => { made.forEach(u => URL.revokeObjectURL(u)); };
 }
 
 /* ---------- files out ---------- */
@@ -885,25 +995,71 @@ function dataURLToBlob(u) {
   const bin = atob(u.slice(i + 1)); const a = new Uint8Array(bin.length); for (let k = 0; k < bin.length; k++) a[k] = bin.charCodeAt(k);
   return new Blob([a], {type: mime});
 }
+function canShareJson() {
+  if (IN_CLAUDE || !navigator.share || !navigator.canShare) return false;
+  try { return navigator.canShare({files: [new File(['{}'], 'x.json', {type: 'application/json'})]}); } catch (e) { return false; }
+}
+/* One file per project, built piece by piece so large projects don't exhaust the phone's memory.
+   The file format is unchanged, so every older backup still restores and every new backup restores in older versions. */
+async function buildBackup(p) {
+  const now = Date.now();
+  const tasks = projTasks(p.id);
+  const expected = tasks.reduce((n, t) => n + (t.photoIds || []).length, 0);
+  const parts = [`{"app":"pinestone-punch-list","version":1,"exportedAt":${JSON.stringify(new Date(now).toISOString())},"projects":`,
+    JSON.stringify([{...p, backedUpAt: now}]), ',"tasks":', JSON.stringify(tasks), ',"photos":['];
+  const recs = await DB.byIndex('photos', 'projectId', p.id);
+  let n = 0, unreadable = 0;
+  for (const ph of recs) {
+    busy(`Preparing backup of ${p.name}… photo ${n + unreadable + 1} of ${recs.length}`);
+    try {
+      const item = {id: ph.id, taskId: ph.taskId, projectId: ph.projectId, w: ph.w, h: ph.h, createdAt: ph.createdAt, data: await blobToDataURL(ph.blob), thumb: ph.thumb ? await blobToDataURL(ph.thumb) : null};
+      parts.push((n ? ',' : '') + JSON.stringify(item)); n++;
+    } catch (e) { unreadable++; }
+  }
+  parts.push(']}');
+  const blob = new Blob(parts, {type: 'application/json'});
+  const name = `Pinestone-PunchList-Backup_${slug(p.name)}_${isoDate(now)}.json`;
+  return {blob, name, at: now, items: tasks.length, photos: n, missing: Math.max(unreadable, expected - n)};
+}
+async function deliverBackup(blob, name) {
+  if (canShareJson()) {
+    try { await navigator.share({files: [new File([blob], name, {type: 'application/json'})], title: name}); return true; }
+    catch (e) { if (e && e.name === 'AbortError') return false; }
+  }
+  return saveFile(blob, name);
+}
 async function backup(projects) {
-  busy('Preparing backup…');
-  try {
-    const out = {app: 'pinestone-punch-list', version: 1, exportedAt: new Date().toISOString(), projects: [], tasks: [], photos: []};
-    for (const p of projects) {
-      out.projects.push(p); out.tasks.push(...projTasks(p.id));
-      for (const ph of await DB.byIndex('photos', 'projectId', p.id))
-        out.photos.push({id: ph.id, taskId: ph.taskId, projectId: ph.projectId, w: ph.w, h: ph.h, createdAt: ph.createdAt, data: await blobToDataURL(ph.blob), thumb: ph.thumb ? await blobToDataURL(ph.thumb) : null});
+  projects = projects.slice().sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+  const many = projects.length > 1; let saved = 0;
+  const shareLabel = canShareJson() ? 'Save to Files…' : 'Save';
+  for (let i = 0; i < projects.length; i++) {
+    const p = projects[i]; let b;
+    busy(`Preparing backup of ${p.name}…`);
+    try { b = await buildBackup(p); } catch (e) { busy(); await ask(`The backup of "${p.name}" could not be prepared (${e.message || e}). Nothing was changed.`, 'OK', {cancel: null}); continue; }
+    busy();
+    const st = backupStatus(p);
+    const msg = `<b>${many ? `Backup ${i + 1} of ${projects.length}: ` : ''}${esc(p.name)}</b><br>${b.items} item${b.items === 1 ? '' : 's'} · ${b.photos} photo${b.photos === 1 ? '' : 's'} · ${(b.blob.size / 1048576).toFixed(1)} MB` +
+      (b.missing ? `<br><span style="color:#b3261e">${b.missing} photo${b.missing > 1 ? 's' : ''} could not be read and ${b.missing > 1 ? 'are' : 'is'} not in this backup.</span>` : '') +
+      (many && !st.dirty && p.backedUpAt ? `<br><small style="color:var(--muted)">No changes since the last backup (${ago(p.backedUpAt)}).</small>` : '') +
+      (canShareJson() ? `<br><small style="color:var(--muted)">Next, choose “Save to Files” and pick your iCloud Drive backup folder.</small>` : '');
+    const buttons = many ? [{label: 'Stop', value: 'stop'}, {label: 'Skip', value: 'skip'}, {label: shareLabel, value: 'save', primary: true}]
+                         : [{label: 'Cancel', value: 'stop'}, {label: shareLabel, value: 'save', primary: true}];
+    const c = await choose(msg, buttons);
+    if (c === 'stop') break;
+    if (c === 'skip') continue;
+    if (await deliverBackup(b.blob, b.name)) {
+      p.backedUpAt = b.at; saved++;
+      try { await DB.put('projects', p); } catch (e) {}
+      render();
     }
-    const name = `Pinestone-PunchList-Backup_${projects.length === 1 ? slug(projects[0].name) : 'All-Projects'}_${isoDate(Date.now())}.json`;
-    const blob = new Blob([JSON.stringify(out)], {type: 'application/json'});
-    busy(); await saveFile(blob, name);
-  } catch (e) { busy(); toast('Backup failed: ' + (e.message || e)); }
+  }
+  if (saved) toast(`${saved} backup${saved > 1 ? 's' : ''} saved`);
 }
 async function restore(file) {
   let data;
   try { data = JSON.parse(await file.text()); } catch (e) { return ask('That file is not a valid Punch List backup.', 'OK', {cancel: null}); }
   if (!data || data.app !== 'pinestone-punch-list' || !Array.isArray(data.projects)) return ask('That file is not a Pinestone Punch List backup.', 'OK', {cancel: null});
-  let restored = 0;
+  let restored = 0; const summary = [];
   for (const p of data.projects) {
     if (S.projects.some(x => x.id === p.id)) {
       if (!await ask(`"${p.name}" is already on this device. Replace it with the copy from the backup? Changes made since the backup will be lost.`, 'Replace', {danger: true, cancel: 'Skip'})) continue;
@@ -912,18 +1068,24 @@ async function restore(file) {
       S.tasks = S.tasks.filter(t => t.projectId !== p.id); S.projects = S.projects.filter(x => x.id !== p.id);
     }
     busy(`Restoring ${p.name}…`);
+    let photoCount = 0, bad = 0;
     try {
-      for (const ph of data.photos.filter(x => x.projectId === p.id))
-        await DB.put('photos', {id: ph.id, taskId: ph.taskId, projectId: ph.projectId, w: ph.w, h: ph.h, createdAt: ph.createdAt, blob: dataURLToBlob(ph.data), thumb: ph.thumb ? dataURLToBlob(ph.thumb) : null});
+      for (const ph of data.photos.filter(x => x.projectId === p.id)) {
+        let blob, thumb = null;
+        try { blob = dataURLToBlob(ph.data); thumb = ph.thumb ? dataURLToBlob(ph.thumb) : null; } catch (e) { bad++; continue; }
+        await DB.put('photos', {id: ph.id, taskId: ph.taskId, projectId: ph.projectId, w: ph.w, h: ph.h, createdAt: ph.createdAt, blob, thumb});
+        photoCount++;
+      }
       const ts = data.tasks.filter(t => t.projectId === p.id);
       for (const t of ts) await DB.put('tasks', t);
       await DB.put('projects', p);
       S.projects.push(p); S.tasks.push(...ts); restored++;
-    } catch (e) { busy(); toast('Restore failed: ' + (e.message || e)); return; }
+      summary.push(`${p.name}: ${ts.length} item${ts.length === 1 ? '' : 's'}, ${photoCount} photo${photoCount === 1 ? '' : 's'}${bad ? ` (${bad} unreadable)` : ''}`);
+    } catch (e) { busy(); render(); return saveFailed(e); }
     busy();
   }
   askPersist(); render();
-  if (restored) toast(`Restored ${restored} project${restored > 1 ? 's' : ''}`);
+  if (restored) ask(`Restored ${restored} project${restored > 1 ? 's' : ''}. ${summary.join(' · ')}`, 'OK', {cancel: null});
 }
 
 /* ---------- events ---------- */
@@ -940,6 +1102,8 @@ document.addEventListener('click', async e => {
     case 'delete-project': return deleteProject();
     case 'backup-project': return backup([cur()]);
     case 'backup-all': return backup(S.projects);
+    case 'check-update': return window.manualUpdateCheck && window.manualUpdateCheck();
+    case 'reload': return location.reload();
     case 'restore': $('#in-restore').value = ''; return $('#in-restore').click();
     case 'add-task': return openTask(null);
     case 'edit-task': return openTask(id);
@@ -985,10 +1149,16 @@ $('#viewer').addEventListener('click', e => { if (e.target.id === 'viewer' || e.
 /* ---------- boot ---------- */
 (async function boot() {
   await DB.init();
-  try { S.projects = await DB.all('projects'); S.tasks = await DB.all('tasks'); } catch (e) { S.projects = []; S.tasks = []; }
+  try { S.projects = await DB.all('projects'); S.tasks = await DB.all('tasks'); }
+  catch (e) { S.projects = []; S.tasks = []; DB.useMemory('failed'); }
+  if (DB.mem) storageError(); else checkStorageSpace();
   S.last = lsGet('pp-last', {});
   const v = lsGet('pp-view', null); if (v && v.view === 'project' && S.projects.some(p => p.id === v.pid)) { S.view = 'project'; S.pid = v.pid; }
-  render();
+  BOOTED = true; render();
+  try {
+    if (sessionStorage.getItem('pp-updated')) { sessionStorage.removeItem('pp-updated'); toast(`Updated to v${APP_VERSION}`); }
+    else if (sessionStorage.getItem('pp-checked')) { sessionStorage.removeItem('pp-checked'); toast(`You have the latest version (v${APP_VERSION})`); }
+  } catch (e) {}
 })();
 </script>
 </body>
