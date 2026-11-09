@@ -5,7 +5,7 @@
 
    EVERY TIME YOU UPLOAD A NEW VERSION: change VERSION below (e.g. 1.3.0 -> 1.3.1).
    That is how phones notice the update. */
-const VERSION = '1.3.0';
+const VERSION = '1.3.1';
 const CACHE = 'pinestone-punch-' + VERSION;
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png'];
 const OPTIONAL = ['./logo.png'];
