@@ -1,0 +1,5080 @@
+{
+ "libraryVersion": "1.1.0",
+ "phases": [
+  {
+   "id": "P01",
+   "name": "Preconstruction & Permitting",
+   "short": "Precon"
+  },
+  {
+   "id": "P02",
+   "name": "Site Setup, Protection & Hazard Control",
+   "short": "Site setup"
+  },
+  {
+   "id": "P03",
+   "name": "Demolition & Discovery",
+   "short": "Demo"
+  },
+  {
+   "id": "P04",
+   "name": "Foundation & Substructure",
+   "short": "Foundation"
+  },
+  {
+   "id": "P05",
+   "name": "Structural Framing & Modifications",
+   "short": "Framing"
+  },
+  {
+   "id": "P06",
+   "name": "Dry-In: Roof, Windows, Doors & WRB",
+   "short": "Dry-in"
+  },
+  {
+   "id": "P07",
+   "name": "Rough Plumbing & Gas",
+   "short": "Rough plumbing"
+  },
+  {
+   "id": "P08",
+   "name": "Rough HVAC & Ventilation",
+   "short": "Rough HVAC"
+  },
+  {
+   "id": "P09",
+   "name": "Rough Electrical & Low-Voltage",
+   "short": "Rough electrical"
+  },
+  {
+   "id": "P10",
+   "name": "Pre-Drywall: Fireblocking, Backing, Air Sealing & Insulation",
+   "short": "Pre-drywall"
+  },
+  {
+   "id": "P11",
+   "name": "Drywall, Tile Backer & Waterproofing",
+   "short": "Drywall & WP"
+  },
+  {
+   "id": "P12",
+   "name": "Exterior Envelope & Site",
+   "short": "Exterior"
+  },
+  {
+   "id": "P13",
+   "name": "Interior Finishes & Trim-Out",
+   "short": "Finishes"
+  },
+  {
+   "id": "P14",
+   "name": "Commissioning, Final Inspections & Handoff",
+   "short": "Closeout"
+  }
+ ],
+ "trades": [
+  "Pinestone (GC)",
+  "Engineer",
+  "Hazmat / Abatement",
+  "Demolition",
+  "Excavation / Site",
+  "Concrete",
+  "Foundation / Crawlspace",
+  "Framing",
+  "Roofing",
+  "Windows & Doors",
+  "Siding / Exterior",
+  "Plumbing",
+  "Gas",
+  "HVAC",
+  "Electrical",
+  "Low-Voltage",
+  "Insulation",
+  "Drywall",
+  "Tile",
+  "Cabinets",
+  "Countertops",
+  "Flooring",
+  "Finish Carpentry",
+  "Painting",
+  "Glass",
+  "Cleaning",
+  "Landscaping",
+  "Utility",
+  "Owner"
+ ],
+ "checkpoints": [
+  {
+   "id": "cp.permit",
+   "name": "Building permit issued",
+   "kind": "ahj",
+   "req": "required",
+   "ph": "P01",
+   "after": [
+    "pre.permit"
+   ],
+   "desc": "Permit issued and permit card posted. Record permit number in project jurisdiction details."
+  },
+  {
+   "id": "cp.tradepermits",
+   "name": "Trade permits issued (electrical / plumbing / mechanical / gas)",
+   "kind": "ahj",
+   "req": "verify",
+   "ph": "P01",
+   "after": [
+    "pre.permit"
+   ],
+   "desc": "Who issues trade permits varies in Tennessee (local codes department vs. State Fire Marshal electrical program). Usually pulled by the licensed trade."
+  },
+  {
+   "id": "cp.historic",
+   "name": "Historic / overlay / HOA approval",
+   "kind": "ahj",
+   "req": "required",
+   "ph": "P01",
+   "w": "A.historic",
+   "after": [
+    "pre.historic"
+   ]
+  },
+  {
+   "id": "cp.haz",
+   "name": "Hazardous materials clearance (asbestos / lead / mold)",
+   "kind": "third-party",
+   "req": "required",
+   "ph": "P02",
+   "w": "A.yearBuilt!=='1978plus' || A.hazTesting!=='done-clear'",
+   "after": [
+    "pre.haz"
+   ],
+   "desc": "Survey results reviewed; any required abatement completed with clearance documentation before disturbance."
+  },
+  {
+   "id": "cp.eng",
+   "name": "Engineered design / stamped letter received",
+   "kind": "third-party",
+   "req": "required",
+   "ph": "P01",
+   "w": "A.engineer==='yes' || has(A.structural,'remove-bearing-wall') || has(A.structural,'ceiling-raise') || has(A.structural,'foundation-repair')",
+   "after": [
+    "pre.eng"
+   ]
+  },
+  {
+   "id": "cp.811",
+   "name": "Tennessee 811 locate tickets clear",
+   "kind": "utility",
+   "req": "required",
+   "ph": "P01",
+   "w": "A.waterService || A.sewerLateral==='replace' || (A.foundation==='basement' && ['exterior-membrane','both'].includes(A.bsmtWater)) || A.flatwork || A.fence || A.grading || A.porch==='new-deck' || A.porch==='new-porch' || A.gas==='new-service' || A.landscaping",
+   "after": [
+    "pre.811"
+   ],
+   "desc": "All member utilities have responded / marked before excavation. Keep ticket numbers in notes."
+  },
+  {
+   "id": "cp.footing",
+   "name": "Footing / pier inspection (pre-pour)",
+   "kind": "ahj",
+   "req": "required",
+   "ph": "P04",
+   "w": "has(A.structural,'remove-bearing-wall') || has(A.structural,'foundation-repair') || (A.foundation==='crawlspace' && has(A.crawlFraming,'new-piers'))",
+   "after": [
+    "fdn.footdig"
+   ]
+  },
+  {
+   "id": "cp.deckfooting",
+   "name": "Deck / porch footing inspection",
+   "kind": "ahj",
+   "req": "required",
+   "ph": "P12",
+   "w": "A.porch==='new-deck' || A.porch==='new-porch'",
+   "after": [
+    "ext.porchfoot"
+   ]
+  },
+  {
+   "id": "cp.underslab",
+   "name": "Underslab plumbing inspection / test",
+   "kind": "ahj",
+   "req": "required",
+   "ph": "P04",
+   "w": "A.foundation!=='crawlspace' && has(A.slabWork,'underslab-plumbing')",
+   "after": [
+    "slab.plbrough"
+   ]
+  },
+  {
+   "id": "cp.preslab",
+   "name": "Pre-pour slab inspection (base, vapor retarder, reinforcement)",
+   "kind": "ahj",
+   "req": "verify",
+   "ph": "P04",
+   "w": "has(A.slabWork,'new-slab')",
+   "after": [
+    "slab.newprep"
+   ]
+  },
+  {
+   "id": "cp.engobs",
+   "name": "Engineer structural observation",
+   "kind": "third-party",
+   "req": "verify",
+   "ph": "P05",
+   "w": "A.engineer==='yes' || has(A.structural,'remove-bearing-wall') || has(A.structural,'ceiling-raise') || has(A.structural,'foundation-repair')",
+   "after": [
+    "frm.beam",
+    "frm.loadpath",
+    "frm.connectors"
+   ]
+  },
+  {
+   "id": "cp.roof",
+   "name": "Roof inspection (if required by AHJ)",
+   "kind": "ahj",
+   "req": "verify",
+   "ph": "P06",
+   "w": "A.roof.startsWith('reroof')",
+   "after": [
+    "roof.ice"
+   ]
+  },
+  {
+   "id": "cp.rough-plb",
+   "name": "Rough plumbing inspection",
+   "kind": "ahj",
+   "req": "required",
+   "ph": "P07",
+   "w": "A.plumbing!=='none'",
+   "after": [
+    "plb.dwv",
+    "plb.supply",
+    "plb.test",
+    "plb.nailplates",
+    "b.tub@*",
+    "plb.wh",
+    "plb.hosebib",
+    "plb.boring"
+   ]
+  },
+  {
+   "id": "cp.rough-gas",
+   "name": "Gas piping rough / pressure test inspection",
+   "kind": "ahj",
+   "req": "required",
+   "ph": "P07",
+   "w": "A.gas!=='none'",
+   "after": [
+    "gas.pipe",
+    "gas.test"
+   ]
+  },
+  {
+   "id": "cp.rough-mech",
+   "name": "Rough mechanical inspection",
+   "kind": "ahj",
+   "req": "required",
+   "ph": "P08",
+   "w": "A.hvac!=='none'",
+   "after": [
+    "hvac.ducts",
+    "hvac.seal",
+    "b.fan@*",
+    "hvac.hood",
+    "hvac.dryer",
+    "hvac.equip",
+    "hvac.lineset",
+    "hvac.condensate",
+    "hvac.combustion",
+    "hvac.freshair",
+    "hvac.terminations"
+   ]
+  },
+  {
+   "id": "cp.rough-elec",
+   "name": "Rough electrical inspection",
+   "kind": "ahj",
+   "req": "required",
+   "ph": "P09",
+   "w": "A.electrical!=='none'",
+   "after": [
+    "ele.rough",
+    "ele.nailplates",
+    "ele.smoke",
+    "ele.kitchen",
+    "b.elec@*",
+    "ele.laundry",
+    "ele.afci",
+    "ele.recessed",
+    "ele.lv",
+    "ele.ext",
+    "b.heatmat@*",
+    "ele.bond"
+   ]
+  },
+  {
+   "id": "cp.framing",
+   "name": "Framing / rough building inspection",
+   "kind": "ahj",
+   "req": "required",
+   "ph": "P10",
+   "after": [
+    "frm.qc",
+    "pd.fireblock",
+    "pd.draftstop"
+   ]
+  },
+  {
+   "id": "cp.insul",
+   "name": "Insulation / energy inspection",
+   "kind": "ahj",
+   "req": "verify",
+   "ph": "P10",
+   "w": "A.insulWalls!=='none' || A.insulAttic==='spray-roofline'",
+   "after": [
+    "pd.insulwalls",
+    "pd.sprayfoam",
+    "pd.airseal"
+   ]
+  },
+  {
+   "id": "cp.predry",
+   "name": "Pinestone pre-drywall QC sign-off",
+   "kind": "internal",
+   "req": "required",
+   "ph": "P10",
+   "after": [
+    "pd.qc",
+    "pd.photo"
+   ],
+   "desc": "Internal hold point. Drywall may not be hung until the pre-drywall walkthrough and photo record are complete."
+  },
+  {
+   "id": "cp.flood",
+   "name": "Shower waterproofing flood test",
+   "kind": "internal",
+   "req": "required",
+   "ph": "P11",
+   "each": "bath",
+   "w": "['tile-tub','tile-shower-curb','tile-curbless'].includes(B.shower)",
+   "after": [
+    "b.flood"
+   ],
+   "desc": "Internal hold point per bathroom (some AHJs also inspect pans — confirm). Tile may not start until passed."
+  },
+  {
+   "id": "cp.service",
+   "name": "Electrical service release / utility reconnection",
+   "kind": "utility",
+   "req": "required",
+   "ph": "P09",
+   "w": "A.electrical!=='none' && A.service!=='none'",
+   "after": [
+    "ele.service"
+   ]
+  },
+  {
+   "id": "cp.gasrelease",
+   "name": "Gas meter set / service release",
+   "kind": "utility",
+   "req": "required",
+   "ph": "P13",
+   "w": "A.gas!=='none'",
+   "after": [
+    "gas.test"
+   ]
+  },
+  {
+   "id": "cp.blower",
+   "name": "Blower door / duct leakage test",
+   "kind": "third-party",
+   "req": "verify",
+   "ph": "P14",
+   "w": "A.hvac==='full' && A.hvacType!=='ductless' || A.insulWalls!=='none'",
+   "after": [
+    "com.blower"
+   ]
+  },
+  {
+   "id": "cp.final-plb",
+   "name": "Final plumbing inspection",
+   "kind": "ahj",
+   "req": "required",
+   "ph": "P14",
+   "w": "A.plumbing!=='none'",
+   "after": [
+    "fin.plbtrim",
+    "com.plb"
+   ]
+  },
+  {
+   "id": "cp.final-gas",
+   "name": "Final gas inspection",
+   "kind": "ahj",
+   "req": "verify",
+   "ph": "P14",
+   "w": "A.gas!=='none'",
+   "after": [
+    "com.gas"
+   ]
+  },
+  {
+   "id": "cp.final-mech",
+   "name": "Final mechanical inspection",
+   "kind": "ahj",
+   "req": "required",
+   "ph": "P14",
+   "w": "A.hvac!=='none'",
+   "after": [
+    "com.hvac"
+   ]
+  },
+  {
+   "id": "cp.final-elec",
+   "name": "Final electrical inspection",
+   "kind": "ahj",
+   "req": "required",
+   "ph": "P14",
+   "w": "A.electrical!=='none'",
+   "after": [
+    "fin.eletrim",
+    "com.ele"
+   ]
+  },
+  {
+   "id": "cp.final-bldg",
+   "name": "Final building inspection",
+   "kind": "ahj",
+   "req": "required",
+   "ph": "P14",
+   "after": [
+    "com.punchfix"
+   ]
+  },
+  {
+   "id": "cp.co",
+   "name": "Certificate of occupancy / completion issued",
+   "kind": "ahj",
+   "req": "verify",
+   "ph": "P14",
+   "after": [
+    "com.finals"
+   ]
+  },
+  {
+   "id": "cp.client",
+   "name": "Owner final walkthrough & acceptance",
+   "kind": "internal",
+   "req": "required",
+   "ph": "P14",
+   "after": [
+    "com.clean",
+    "com.punchfix"
+   ]
+  }
+ ],
+ "tasks": [
+  {
+   "id": "pre.walk",
+   "t": "Existing-conditions walkthrough & baseline photos",
+   "tr": "Pinestone (GC)",
+   "ph": "P01",
+   "d": [],
+   "g": [],
+   "f": [],
+   "photo": true,
+   "q": [
+    "Every room photographed (4 walls + ceiling + floor)",
+    "Exterior elevations, roof, foundation, crawl/attic photographed",
+    "Meter, panel, water heater, HVAC data plates photographed",
+    "Existing damage documented before work starts"
+   ],
+   "G": {
+    "w": "Document the house as purchased/contracted before any work so pre-existing damage, layout, and utilities are on record.",
+    "t": [
+     "P||Photograph data plates (panel, water heater, furnace/air handler, condenser) — model and age drive scope.",
+     "P||Note sagging floors, cracks, water stains, and roof leaks with location tags.",
+     "P||Check for active leaks and turn off water if the house is vacant and at risk of freezing."
+    ],
+    "m": [
+     "Skipping crawlspace and attic photos — the most common source of later disputes and change orders.",
+     "Not recording existing neighbor-side conditions (fences, driveways) before equipment arrives."
+    ]
+   }
+  },
+  {
+   "id": "pre.measure",
+   "t": "Field measure & as-built floor plan",
+   "tr": "Pinestone (GC)",
+   "ph": "P01",
+   "d": [
+    "pre.walk"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Ceiling heights recorded",
+    "Window/door sizes recorded",
+    "Joist direction and bearing walls marked"
+   ]
+  },
+  {
+   "id": "pre.scope",
+   "t": "Finalize scope of work & selections schedule",
+   "tr": "Pinestone (GC)",
+   "ph": "P01",
+   "d": [
+    "pre.measure"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Scope by trade written",
+    "Allowances and selection deadlines set",
+    "Long-lead items identified"
+   ]
+  },
+  {
+   "id": "pre.haz",
+   "t": "Hazardous materials assessment (asbestos / lead / mold)",
+   "tr": "Hazmat / Abatement",
+   "ph": "P01",
+   "d": [],
+   "g": [],
+   "f": [
+    "cp.haz"
+   ],
+   "w": "A.yearBuilt!=='1978plus' || A.hazTesting!=='done-clear'",
+   "q": [
+    "Asbestos survey of materials to be disturbed",
+    "Lead determination for pre-1978 home",
+    "Mold assessment if visible growth",
+    "Reports filed in project"
+   ],
+   "G": {
+    "w": "Determine whether materials that will be disturbed contain asbestos or lead and whether abatement or lead-safe practices are required before demolition.",
+    "t": [
+     "C|EPA 40 CFR Part 745 (RRP Rule)|Renovation of pre-1978 target housing that disturbs painted surfaces above de minimis thresholds must be performed by an EPA (or authorized-state) certified firm using lead-safe work practices, unless a certified inspector/risk assessor determines no lead-based paint is present.",
+     "L||Asbestos survey and notification requirements for residential demolition/renovation depend on building type and program (TDEC / local air program). Confirm before demolition.",
+     "P||Pinestone standard: test suspect materials (vermiculite, 9×9 floor tile, mastic, popcorn ceiling, duct wrap, plaster/joint compound) before full gut on any pre-1980s house."
+    ],
+    "m": [
+     "Starting demolition on a pre-1978 house without RRP certification or documentation.",
+     "Assuming popcorn ceiling or floor mastic is asbestos-free."
+    ],
+    "i": "Clearance documentation is recorded on the Hazardous materials clearance checkpoint, separate from this task."
+   }
+  },
+  {
+   "id": "pre.eng",
+   "t": "Engage engineer: structural design / stamped letter",
+   "tr": "Engineer",
+   "ph": "P01",
+   "d": [
+    "pre.measure"
+   ],
+   "g": [],
+   "f": [
+    "cp.eng"
+   ],
+   "w": "A.engineer==='yes' || has(A.structural,'remove-bearing-wall') || has(A.structural,'ceiling-raise') || has(A.structural,'foundation-repair')",
+   "q": [
+    "Beam size, species/grade, bearing and post design specified",
+    "Footing / point-load path to foundation specified",
+    "Connector schedule specified",
+    "Design submitted with permit"
+   ],
+   "G": {
+    "w": "Obtain engineered design for bearing-wall removal, beams, ceiling vaulting, foundation repairs, or other structural changes.",
+    "t": [
+     "C|IRC R301.1.3|Elements not conforming to the prescriptive provisions of the IRC must be designed per accepted engineering practice. Bearing-wall removal with a new beam typically falls here.",
+     "P||Ask the engineer to specify: beam, posts, bearing length, squash blocks, foundation/footing at point loads, hangers/straps, and temporary shoring.",
+     "L||Some AHJs require a stamped letter or sealed drawings at permit; others accept a site letter afterwards. Confirm."
+    ],
+    "m": [
+     "Sizing a beam off a span chart but ignoring the point load path down to the footing.",
+     "Ordering an LVL before the engineer confirms ply count and bearing."
+    ]
+   }
+  },
+  {
+   "id": "pre.drawings",
+   "t": "Permit drawings / scope plans",
+   "tr": "Pinestone (GC)",
+   "ph": "P01",
+   "d": [
+    "pre.scope"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Floor plan existing + proposed",
+    "Structural sheet / engineer letter attached",
+    "Window/door schedule incl. egress & safety glazing"
+   ]
+  },
+  {
+   "id": "pre.historic",
+   "t": "Historic overlay / HOA design approval",
+   "tr": "Pinestone (GC)",
+   "ph": "P01",
+   "d": [
+    "pre.drawings"
+   ],
+   "g": [],
+   "f": [
+    "cp.historic"
+   ],
+   "w": "A.historic",
+   "G": {
+    "w": "Obtain design approval before exterior changes (windows, siding, roofing, porches).",
+    "t": [
+     "L||Overlay and HOA rules are local. Approved materials and window types may be restricted. Get approval in writing."
+    ]
+   }
+  },
+  {
+   "id": "pre.permit",
+   "t": "Apply for building permit & coordinate trade permits",
+   "tr": "Pinestone (GC)",
+   "ph": "P01",
+   "d": [
+    "pre.drawings",
+    "pre.eng",
+    "pre.historic"
+   ],
+   "g": [],
+   "f": [
+    "cp.permit",
+    "cp.tradepermits"
+   ],
+   "q": [
+    "Correct jurisdiction / AHJ confirmed",
+    "Code edition confirmed and recorded in project",
+    "Trade contractors pulling their own permits confirmed"
+   ],
+   "G": {
+    "w": "Apply for the building permit and make sure every licensed trade pulls the permits they are responsible for.",
+    "t": [
+     "L|TN State Fire Marshal / local codes|Tennessee has a state residential program (2018 IRC adopted statewide) but many cities and counties enforce their own adopted edition. Confirm who the AHJ is for this address and record the code edition on the project.",
+     "L||Electrical permits/inspections may be issued by the local codes department or by the State Fire Marshal program depending on location."
+    ],
+    "m": [
+     "Assuming the city adopted the same edition as the state.",
+     "Letting a sub start work before their trade permit is issued."
+    ]
+   }
+  },
+  {
+   "id": "pre.811",
+   "t": "Tennessee 811 locate request",
+   "tr": "Pinestone (GC)",
+   "ph": "P01",
+   "d": [
+    "pre.scope"
+   ],
+   "g": [],
+   "f": [
+    "cp.811"
+   ],
+   "w": "A.waterService || A.sewerLateral==='replace' || (A.foundation==='basement' && ['exterior-membrane','both'].includes(A.bsmtWater)) || A.flatwork || A.fence || A.grading || A.porch==='new-deck' || A.porch==='new-porch' || A.gas==='new-service' || A.landscaping",
+   "G": {
+    "w": "Request utility locates before any digging: sewer/water lines, footings, drainage, fence posts, grading, or flatwork.",
+    "t": [
+     "C|TN Underground Utility Damage Prevention Act (T.C.A. Title 65, Ch. 31)|Excavators must notify the one-call center before excavating and wait the required notice period (working days). Confirm the current notice period and ticket life with Tennessee 811.",
+     "P||Private lines (owner sewer laterals, private electric to outbuildings, irrigation) are not marked by 811 — locate them separately."
+    ],
+    "m": [
+     "Letting the ticket expire before digging.",
+     "Assuming 811 marks the private sewer lateral."
+    ]
+   }
+  },
+  {
+   "id": "pre.utilities",
+   "t": "Utility coordination: temp power, disconnects, accounts",
+   "tr": "Pinestone (GC)",
+   "ph": "P01",
+   "d": [
+    "pre.scope"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Electric account / temp power",
+    "Water account active",
+    "Gas disconnect or meter plan",
+    "Service upgrade requested with utility (if any)"
+   ]
+  },
+  {
+   "id": "pre.subs",
+   "t": "Schedule trades; verify licenses & insurance",
+   "tr": "Pinestone (GC)",
+   "ph": "P01",
+   "d": [
+    "pre.scope"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "License verified (TN Board for Licensing Contractors / local)",
+    "COI with general liability on file",
+    "Workers comp or exemption on file",
+    "Scope of work signed"
+   ]
+  },
+  {
+   "id": "pre.order",
+   "t": "Order long-lead items (windows, doors, cabinets, tile, equipment)",
+   "tr": "Pinestone (GC)",
+   "ph": "P01",
+   "d": [
+    "pre.scope"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Lead times recorded",
+    "Window/door sizes verified against rough openings or measured openings",
+    "Delivery dates scheduled to need"
+   ]
+  },
+  {
+   "id": "pre.selections",
+   "t": "Owner selections approved & signed",
+   "tr": "Owner",
+   "ph": "P01",
+   "d": [
+    "pre.scope"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Fixtures/finishes selected",
+    "Tile layouts approved",
+    "Cabinet drawings approved",
+    "Paint colors chosen"
+   ]
+  },
+  {
+   "id": "site.signs",
+   "t": "Post permit card, jobsite sign, lockbox",
+   "tr": "Pinestone (GC)",
+   "ph": "P02",
+   "d": [
+    "pre.permit"
+   ],
+   "g": [
+    "cp.permit"
+   ],
+   "f": []
+  },
+  {
+   "id": "site.dumpster",
+   "t": "Dumpster & portable toilet",
+   "tr": "Pinestone (GC)",
+   "ph": "P02",
+   "d": [
+    "pre.scope"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Placement does not block sidewalk / ROW without permit",
+    "Plywood under dumpster on driveway"
+   ]
+  },
+  {
+   "id": "site.shutoffs",
+   "t": "Shut off / make safe utilities in demo areas",
+   "tr": "Electrical",
+   "ph": "P02",
+   "d": [
+    "pre.utilities"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Circuits in demo areas de-energized and verified dead",
+    "Water capped at fixtures or shut at main",
+    "Gas shut off and capped at appliances being removed"
+   ],
+   "G": {
+    "w": "Make demolition areas safe: verified-dead circuits, capped water and gas.",
+    "t": [
+     "P||Verify dead with a tester — breaker labels on old panels are unreliable.",
+     "P||Leave one labeled temporary circuit or temp pole for tools/lights.",
+     "L||Gas shutoffs at the meter may require the utility; capping appliance stubs is licensed gas work."
+    ],
+    "m": [
+     "Cutting into a wall with a live circuit fed from an unlabeled breaker.",
+     "Leaving gas lines uncapped after appliance removal."
+    ]
+   }
+  },
+  {
+   "id": "site.protect",
+   "t": "Protect retained items (floors, windows, trees, equipment)",
+   "tr": "Pinestone (GC)",
+   "ph": "P02",
+   "d": [
+    "pre.walk"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Retained hardwood covered",
+    "Retained windows protected",
+    "Tree root zones protected",
+    "Neighbor property protected"
+   ]
+  },
+  {
+   "id": "site.erosion",
+   "t": "Erosion & sediment control where soil is disturbed",
+   "tr": "Excavation / Site",
+   "ph": "P02",
+   "d": [
+    "pre.811"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.waterService || A.sewerLateral==='replace' || (A.foundation==='basement' && ['exterior-membrane','both'].includes(A.bsmtWater)) || A.flatwork || A.fence || A.grading || A.porch==='new-deck' || A.porch==='new-porch' || A.gas==='new-service' || A.landscaping",
+   "G": {
+    "w": "Install silt fence / inlet protection where grading or excavation could move soil off site.",
+    "t": [
+     "L||Local stormwater rules vary; small residential lots may still need silt fence or inlet protection."
+    ]
+   }
+  },
+  {
+   "id": "site.rrp",
+   "t": "Lead-safe containment setup (RRP)",
+   "tr": "Hazmat / Abatement",
+   "ph": "P02",
+   "d": [
+    "pre.haz"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.yearBuilt!=='1978plus'",
+   "q": [
+    "Certified renovator on site / assigned",
+    "Containment, signage and HEPA cleanup in place",
+    "Cleaning verification planned"
+   ],
+   "G": {
+    "w": "Set up lead-safe work-area containment for pre-1978 work unless lead-free determination is documented.",
+    "t": [
+     "C|EPA 40 CFR 745 Subpart E|Post warning signs, contain the work area, prohibit dry sanding/open-flame removal, and perform cleaning verification.",
+     "P||Keep RRP records (certificates, Renovate Right acknowledgment, cleaning verification) with the project."
+    ]
+   }
+  },
+  {
+   "id": "site.abate",
+   "t": "Asbestos / lead abatement by licensed contractor",
+   "tr": "Hazmat / Abatement",
+   "ph": "P02",
+   "d": [
+    "pre.haz"
+   ],
+   "g": [],
+   "f": [
+    "cp.haz"
+   ],
+   "w": "A.hazTesting==='done-abatement'",
+   "G": {
+    "w": "Licensed abatement of identified materials with clearance documentation before general demolition.",
+    "t": [
+     "L||Licensing, notification, and clearance requirements depend on material and program (TDEC / local). Follow the survey and abatement contractor."
+    ]
+   }
+  },
+  {
+   "id": "site.safety",
+   "t": "Jobsite safety setup",
+   "tr": "Pinestone (GC)",
+   "ph": "P02",
+   "d": [
+    "pre.scope"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Fire extinguisher",
+    "First aid kit",
+    "Floor openings covered / guarded",
+    "Temporary handrails at stairs"
+   ]
+  },
+  {
+   "id": "demo.interior",
+   "t": "Interior demolition to studs",
+   "tr": "Demolition",
+   "ph": "P03",
+   "d": [
+    "site.shutoffs",
+    "site.protect",
+    "site.dumpster",
+    "site.rrp",
+    "site.abate"
+   ],
+   "g": [
+    "cp.permit",
+    "cp.haz"
+   ],
+   "f": [],
+   "q": [
+    "Bearing walls identified and NOT removed",
+    "Retained items protected",
+    "No debris in crawlspace / ducts"
+   ],
+   "G": {
+    "w": "Remove interior finishes to studs and joists within scope without damaging structure or retained elements.",
+    "t": [
+     "P||Mark all bearing walls with paint before demo crews start. Nothing structural comes out during demo — beam work is done by framers under the engineered design.",
+     "P||Remove nails/screws from studs and joists as you go (makes framing QC and drywall faster)."
+    ],
+    "m": [
+     "Removing a bearing wall or cutting joists during demo.",
+     "Dropping debris into the crawlspace or open ducts."
+    ]
+   }
+  },
+  {
+   "id": "demo.plaster",
+   "t": "Plaster & lath removal",
+   "tr": "Demolition",
+   "ph": "P03",
+   "d": [
+    "demo.interior"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.plaster",
+   "q": [
+    "Dust control in place",
+    "Lath nails pulled",
+    "Floor loading watched (debris weight)"
+   ]
+  },
+  {
+   "id": "demo.mep",
+   "t": "Remove abandoned wiring, piping & ductwork",
+   "tr": "Demolition",
+   "ph": "P03",
+   "d": [
+    "demo.interior"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "No abandoned live circuits",
+    "Abandoned gas lines capped at source by licensed trade",
+    "Old ducts removed from crawl/attic"
+   ]
+  },
+  {
+   "id": "demo.chimney",
+   "t": "Chimney / fireplace removal or capping",
+   "tr": "Demolition",
+   "ph": "P03",
+   "d": [
+    "demo.interior"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.fireplace==='remove'",
+   "G": {
+    "w": "Remove chimney and fireplace safely and frame/flash the roof and floor openings.",
+    "t": [
+     "P||Plan the roof patch and decking with the roofer; temporary dry-in the same day.",
+     "P||Verify whether the chimney carries other flues (furnace/water heater) before removal."
+    ]
+   }
+  },
+  {
+   "id": "demo.clean",
+   "t": "Debris removal & broom clean",
+   "tr": "Demolition",
+   "ph": "P03",
+   "d": [
+    "demo.interior",
+    "demo.mep"
+   ],
+   "g": [],
+   "f": []
+  },
+  {
+   "id": "demo.photo",
+   "t": "Post-demo photo documentation of all framing",
+   "tr": "Pinestone (GC)",
+   "ph": "P03",
+   "d": [
+    "demo.clean"
+   ],
+   "g": [],
+   "f": [],
+   "photo": true,
+   "q": [
+    "Every wall and ceiling bay photographed",
+    "Damage (rot, termites, fire, cut joists) photographed with location"
+   ]
+  },
+  {
+   "id": "demo.assess",
+   "t": "Post-demo structural & moisture assessment",
+   "tr": "Pinestone (GC)",
+   "ph": "P03",
+   "d": [
+    "demo.clean"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Rot / termite / fire damage located",
+    "Over-notched or cut framing found",
+    "Undersized headers / prior bad modifications found",
+    "Moisture readings of framing at wet areas"
+   ],
+   "G": {
+    "w": "Walk the open framing to find hidden damage and prior poor work before new work covers it.",
+    "t": [
+     "C|IRC R502.8 / R602.6|Existing notches and bored holes must be within the allowable limits for joists and studs; repair or reinforce those that are not.",
+     "P||Take moisture meter readings at sill plates, bath floors, and around old window openings. Wood at or above about 19% MC needs investigation before closing in."
+    ],
+    "m": [
+     "Covering damaged framing because it was not in the original scope."
+    ]
+   }
+  },
+  {
+   "id": "demo.termite",
+   "t": "Termite / WDI inspection & treatment",
+   "tr": "Foundation / Crawlspace",
+   "ph": "P03",
+   "d": [
+    "demo.assess"
+   ],
+   "g": [],
+   "f": [],
+   "w": "has(A.crawlMoisture,'termite') || A.foundation==='crawlspace' || A.foundation==='slab'",
+   "G": {
+    "w": "Treat active infestations and protect new wood.",
+    "t": [
+     "C|IRC R318|Termite protection is required in areas subject to termite damage — Tennessee is in a high-hazard region. Confirm treatment method with the AHJ and licensed pest control."
+    ]
+   }
+  },
+  {
+   "id": "demo.changes",
+   "t": "Update scope & change orders from discoveries",
+   "tr": "Pinestone (GC)",
+   "ph": "P03",
+   "d": [
+    "demo.assess"
+   ],
+   "g": [],
+   "f": []
+  },
+  {
+   "id": "fdn.footdig",
+   "t": "Excavate footings / pier pads for new point loads",
+   "tr": "Foundation / Crawlspace",
+   "ph": "P04",
+   "d": [
+    "pre.eng",
+    "demo.assess"
+   ],
+   "g": [
+    "cp.permit"
+   ],
+   "f": [
+    "cp.footing"
+   ],
+   "w": "has(A.structural,'remove-bearing-wall') || has(A.structural,'foundation-repair') || (A.foundation==='crawlspace' && has(A.crawlFraming,'new-piers'))",
+   "q": [
+    "Size and depth per engineer / IRC R403",
+    "Bottom on undisturbed soil, no water",
+    "Reinforcement as specified"
+   ],
+   "G": {
+    "w": "Dig footings for new posts/piers and point loads before the footing inspection.",
+    "t": [
+     "C|IRC R403.1|Footings sized for loads and soil bearing; bottom below frost depth per local design criteria (Table R301.2(1)).",
+     "L||Frost depth is set by the AHJ (Middle Tennessee is commonly 12 in. — confirm).",
+     "P||Photograph each hole with a tape measure showing width and depth."
+    ]
+   }
+  },
+  {
+   "id": "fdn.footpour",
+   "t": "Pour footings / set piers",
+   "tr": "Concrete",
+   "ph": "P04",
+   "d": [
+    "fdn.footdig"
+   ],
+   "g": [
+    "cp.footing"
+   ],
+   "f": [],
+   "w": "has(A.structural,'remove-bearing-wall') || has(A.structural,'foundation-repair') || (A.foundation==='crawlspace' && has(A.crawlFraming,'new-piers'))"
+  },
+  {
+   "id": "crawl.clean",
+   "t": "Crawlspace clean-out (debris, wood, organics)",
+   "tr": "Foundation / Crawlspace",
+   "ph": "P04",
+   "d": [
+    "demo.clean"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='crawlspace'",
+   "q": [
+    "All wood debris removed (termite food)",
+    "Old insulation and vapor barrier removed",
+    "Grade smoothed for liner"
+   ]
+  },
+  {
+   "id": "crawl.assess",
+   "t": "Crawlspace moisture & framing assessment",
+   "tr": "Pinestone (GC)",
+   "ph": "P04",
+   "d": [
+    "crawl.clean"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='crawlspace'",
+   "photo": true,
+   "q": [
+    "Moisture content of sill, joists, girders recorded",
+    "Joist clearance to grade checked (18 in. / 12 in. girders)",
+    "Signs of water entry mapped",
+    "Dryer, bath fan, plumbing vents not terminating in crawl"
+   ],
+   "G": {
+    "w": "Measure moisture, find rot and water entry, and confirm clearances before crawlspace work is designed.",
+    "t": [
+     "C|IRC R317.1|Wood joists closer than 18 in. or girders closer than 12 in. to exposed ground in crawlspaces must be naturally durable or preservative-treated.",
+     "C|IRC R408.4|Crawlspace access opening minimum 18 in. × 24 in. (verify for your foundation type).",
+     "P||Record a relative-humidity reading and photo of the hygrometer — use it as a baseline for post-work comparison."
+    ]
+   }
+  },
+  {
+   "id": "crawl.access",
+   "t": "Crawlspace access opening & door",
+   "tr": "Framing",
+   "ph": "P04",
+   "d": [
+    "crawl.assess"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='crawlspace'"
+  },
+  {
+   "id": "crawl.sill",
+   "t": "Replace rotted sill plate / rim joist",
+   "tr": "Framing",
+   "ph": "P04",
+   "d": [
+    "crawl.assess",
+    "demo.termite"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='crawlspace' && has(A.crawlFraming,'replace-sill')",
+   "q": [
+    "Treated sill on foundation",
+    "Anchor bolts / approved anchors at required spacing",
+    "Sill gasket / capillary break"
+   ],
+   "G": {
+    "w": "Replace damaged sill and rim while temporarily supporting the structure.",
+    "t": [
+     "C|IRC R317.1|Sills on concrete or masonry in contact with the ground must be preservative-treated or naturally durable.",
+     "C|IRC R403.1.6|Sill plates anchored to the foundation (bolt size, spacing within 12 in. of plate ends, etc.). Retrofit anchors must be approved / listed.",
+     "M||Use corrosion-resistant fasteners rated for the treated lumber used."
+    ]
+   }
+  },
+  {
+   "id": "crawl.girder",
+   "t": "Girder repair / supplement",
+   "tr": "Framing",
+   "ph": "P04",
+   "d": [
+    "crawl.assess",
+    "fdn.footpour"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='crawlspace' && has(A.crawlFraming,'girder-repair')"
+  },
+  {
+   "id": "crawl.sister",
+   "t": "Sister / replace damaged floor joists",
+   "tr": "Framing",
+   "ph": "P04",
+   "d": [
+    "crawl.assess"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='crawlspace' && (has(A.crawlFraming,'sister-joists') || has(A.structural,'floor-joist-repair'))",
+   "q": [
+    "Sister bears on the same supports as the original (full length) unless engineered",
+    "Fastening schedule met",
+    "Joist crowns aligned"
+   ],
+   "G": {
+    "w": "Reinforce or replace damaged and over-notched joists.",
+    "t": [
+     "P||Full-length sisters bearing on the girder and sill are the Pinestone default. Partial sisters need an engineered detail.",
+     "C|IRC R502.8|Cuts, notches and holes in joists limited by size and location — fix prior violations rather than adding new ones."
+    ]
+   }
+  },
+  {
+   "id": "crawl.shim",
+   "t": "Shim / adjust supports and level floors",
+   "tr": "Framing",
+   "ph": "P04",
+   "d": [
+    "crawl.girder",
+    "crawl.sister",
+    "fdn.footpour"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='crawlspace' && has(A.crawlFraming,'shim-supports')",
+   "q": [
+    "Steel shims / hardwood shims (no softwood, no stacked scraps)",
+    "Floors checked with laser before and after"
+   ]
+  },
+  {
+   "id": "crawl.subfloor",
+   "t": "Subfloor replacement",
+   "tr": "Framing",
+   "ph": "P04",
+   "d": [
+    "crawl.sister",
+    "crawl.shim",
+    "demo.assess"
+   ],
+   "g": [],
+   "f": [],
+   "w": "(A.foundation==='crawlspace' || A.foundation==='basement') && A.subfloor!=='keep'",
+   "q": [
+    "Panel span rating matches joist spacing",
+    "Glued and screwed / ring-shank nailed",
+    "Panel gaps per manufacturer (typ. 1/8 in.)",
+    "Edges supported / T&G engaged"
+   ],
+   "G": {
+    "w": "Install new subfloor flat and squeak-free for tile and hard-surface flooring.",
+    "t": [
+     "C|IRC R503|Floor sheathing span rating and fastening per IRC tables for the joist spacing.",
+     "M||Panel edge spacing and adhesive per panel manufacturer (APA guidelines).",
+     "S|TCNA / ANSI|Tile areas need adequate deflection performance (ceramic L/360, natural stone L/720 typical). Plan underlayment accordingly."
+    ],
+    "m": [
+     "Nailing with smooth-shank nails into old dried joists (squeaks).",
+     "Leaving subfloor uncovered in rain for days."
+    ]
+   }
+  },
+  {
+   "id": "crawl.vapor",
+   "t": "Ground vapor retarder / crawlspace liner",
+   "tr": "Foundation / Crawlspace",
+   "ph": "P04",
+   "d": [
+    "crawl.clean",
+    "crawl.drain",
+    "crawl.sill",
+    "crawl.sister",
+    "crawl.shim",
+    "fdn.footpour"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='crawlspace'",
+   "photo": true,
+   "q": [
+    "Seams overlapped and taped",
+    "Liner run up piers/walls as designed",
+    "No tears; liner protected at access path"
+   ],
+   "G": {
+    "w": "Cover exposed ground in the crawlspace with a continuous vapor retarder.",
+    "t": [
+     "C|IRC R408.2|In vented crawlspaces, required ventilation area can be reduced when the ground surface is covered with a Class I vapor retarder.",
+     "C|IRC R408.3|Unvented crawlspaces require a continuous Class I vapor retarder with joints overlapped 6 in. and sealed or taped, edges extended at least 6 in. up the stem wall and attached and sealed.",
+     "P||Pinestone standard liner: reinforced 10–20 mil for encapsulation; minimum 6 mil poly for vented crawls."
+    ],
+    "m": [
+     "Installing liner before plumbing and framing repairs are done (gets torn).",
+     "Leaving liner unsealed at piers and walls in an unvented crawl."
+    ]
+   }
+  },
+  {
+   "id": "crawl.drain",
+   "t": "Crawlspace interior drain & sump",
+   "tr": "Foundation / Crawlspace",
+   "ph": "P04",
+   "d": [
+    "crawl.clean"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='crawlspace' && ['interior-sump','both'].includes(A.crawlDrain)",
+   "q": [
+    "Drain pitched to sump",
+    "Sump lid sealed (unvented crawl)",
+    "Discharge carried well away from foundation",
+    "Check valve installed",
+    "Pump on dedicated / GFCI receptacle as required"
+   ]
+  },
+  {
+   "id": "crawl.encap",
+   "t": "Seal crawlspace vents, rim, and penetrations",
+   "tr": "Foundation / Crawlspace",
+   "ph": "P04",
+   "d": [
+    "crawl.vapor",
+    "plb.dwv",
+    "plb.supply",
+    "hvac.ducts",
+    "ele.rough"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='crawlspace' && A.crawlStrategy!=='vented'",
+   "G": {
+    "w": "Air-seal the crawlspace from the outdoors once penetrations are done.",
+    "t": [
+     "C|IRC R408.3|Unvented crawlspaces: no ventilation openings to the outside; perimeter walls insulated; and one of the listed conditioning methods required.",
+     "P||Do this after plumbing, electrical and HVAC have finished in the crawl — otherwise seals get broken."
+    ]
+   }
+  },
+  {
+   "id": "crawl.condition",
+   "t": "Crawlspace conditioning / dehumidification",
+   "tr": "HVAC",
+   "ph": "P04",
+   "d": [
+    "crawl.encap"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='crawlspace' && A.crawlStrategy!=='vented'",
+   "G": {
+    "w": "Provide the conditioning method required for an unvented crawlspace.",
+    "t": [
+     "C|IRC R408.3|Options include continuously operated mechanical exhaust, conditioned supply air (with return path), or a dehumidifier (added in later editions) at the rates stated in the code. Check which options your adopted edition allows.",
+     "M||Dehumidifier condensate routed to sump or drain; dedicated circuit per manufacturer."
+    ]
+   }
+  },
+  {
+   "id": "crawl.vents",
+   "t": "Verify foundation vent area & clear vents",
+   "tr": "Foundation / Crawlspace",
+   "ph": "P04",
+   "d": [
+    "crawl.vapor"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='crawlspace' && A.crawlStrategy==='vented'",
+   "G": {
+    "w": "Confirm adequate, unobstructed cross ventilation in a vented crawlspace.",
+    "t": [
+     "C|IRC R408.1 / R408.2|Ventilation openings sized at 1 sq ft per 150 sq ft of crawlspace area (reduced to 1 per 1,500 with a Class I ground vapor retarder), one within 3 ft of each corner, with corrosion-resistant screening."
+    ]
+   }
+  },
+  {
+   "id": "crawl.insul",
+   "t": "Crawlspace insulation",
+   "tr": "Insulation",
+   "ph": "P04",
+   "d": [
+    "crawl.encap",
+    "crawl.vapor",
+    "plb.test",
+    "ele.rough"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='crawlspace' && A.crawlInsul!=='none'",
+   "photo": true,
+   "G": {
+    "w": "Insulate the floor (vented crawl) or the foundation walls/rim (unvented crawl).",
+    "t": [
+     "C|IRC N1102.2.7 / N1102.2.11|Floor insulation installed in permanent contact with the underside of the subfloor; crawlspace wall insulation permitted in lieu of floor insulation when the crawl is unvented and meets R408.3.",
+     "C|IRC R316|Foam plastic in crawlspaces needs the required thermal/ignition barrier unless listed for exposed use.",
+     "L|IRC R318.4|Foam on foundation walls in termite-prone areas may require an inspection gap or other termite provisions. Confirm with AHJ."
+    ],
+    "m": [
+     "Floor batts sagging away from the subfloor — no support wires/straps.",
+     "Unrated foam left exposed in the crawl."
+    ]
+   }
+  },
+  {
+   "id": "crawl.final",
+   "t": "Crawlspace final QC & photo record",
+   "tr": "Pinestone (GC)",
+   "ph": "P04",
+   "d": [
+    "crawl.vapor",
+    "crawl.encap",
+    "crawl.condition",
+    "crawl.insul",
+    "crawl.vents",
+    "crawl.drain"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='crawlspace'",
+   "photo": true
+  },
+  {
+   "id": "slab.scan",
+   "t": "Scan slab before cutting (post-tension / embedded lines)",
+   "tr": "Concrete",
+   "ph": "P04",
+   "d": [
+    "demo.clean"
+   ],
+   "g": [],
+   "f": [],
+   "w": "(A.foundation==='slab' || A.foundation==='basement') && (has(A.slabWork,'underslab-plumbing') || has(A.slabWork,'slab-patch'))",
+   "G": {
+    "w": "Locate tendons, radiant tubing, conduits and pipes before saw-cutting.",
+    "t": [
+     "P||Check for post-tension stamps or tendon ends at the slab edge. Never cut a post-tensioned slab without engineer direction."
+    ]
+   }
+  },
+  {
+   "id": "slab.cut",
+   "t": "Saw-cut & trench for underslab plumbing",
+   "tr": "Concrete",
+   "ph": "P04",
+   "d": [
+    "slab.scan",
+    "plb.layout"
+   ],
+   "g": [
+    "cp.permit"
+   ],
+   "f": [],
+   "w": "has(A.slabWork,'underslab-plumbing')"
+  },
+  {
+   "id": "slab.plbrough",
+   "t": "Underslab DWV / supply rough-in & test",
+   "tr": "Plumbing",
+   "ph": "P04",
+   "d": [
+    "slab.cut"
+   ],
+   "g": [],
+   "f": [
+    "cp.underslab"
+   ],
+   "w": "has(A.slabWork,'underslab-plumbing')",
+   "photo": true,
+   "q": [
+    "Slope verified",
+    "Test on (water column or air)",
+    "Sleeved where passing through concrete",
+    "Photographed with tape before backfill"
+   ]
+  },
+  {
+   "id": "slab.backfill",
+   "t": "Backfill, compact & vapor retarder in trenches",
+   "tr": "Concrete",
+   "ph": "P04",
+   "d": [
+    "slab.plbrough"
+   ],
+   "g": [
+    "cp.underslab"
+   ],
+   "f": [],
+   "w": "has(A.slabWork,'underslab-plumbing')"
+  },
+  {
+   "id": "slab.patch",
+   "t": "Pour slab patches / infill",
+   "tr": "Concrete",
+   "ph": "P04",
+   "d": [
+    "slab.backfill"
+   ],
+   "g": [],
+   "f": [],
+   "w": "has(A.slabWork,'underslab-plumbing') || has(A.slabWork,'slab-patch')",
+   "q": [
+    "Dowels / reinforcement per detail",
+    "Vapor retarder lapped to existing",
+    "Finished flush with existing"
+   ]
+  },
+  {
+   "id": "slab.newprep",
+   "t": "New slab: base, vapor retarder, reinforcement",
+   "tr": "Concrete",
+   "ph": "P04",
+   "d": [
+    "fdn.footpour",
+    "demo.clean"
+   ],
+   "g": [],
+   "f": [
+    "cp.preslab"
+   ],
+   "w": "has(A.slabWork,'new-slab')",
+   "G": {
+    "w": "Prepare a new slab section ready for pre-pour inspection.",
+    "t": [
+     "C|IRC R506.2.2 / R506.2.3|Base course and a 6-mil vapor retarder with lapped joints required under slabs on grade over habitable space (with listed exceptions).",
+     "P||Photograph vapor retarder laps and reinforcement before the pour."
+    ]
+   }
+  },
+  {
+   "id": "slab.newpour",
+   "t": "Pour new slab section",
+   "tr": "Concrete",
+   "ph": "P04",
+   "d": [
+    "slab.newprep"
+   ],
+   "g": [
+    "cp.preslab"
+   ],
+   "f": [],
+   "w": "has(A.slabWork,'new-slab')"
+  },
+  {
+   "id": "slab.radon",
+   "t": "Radon mitigation system rough-in",
+   "tr": "Foundation / Crawlspace",
+   "ph": "P04",
+   "d": [
+    "demo.clean"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.radon",
+   "G": {
+    "w": "Install the radon vent pipe route and suction point (passive or active).",
+    "t": [
+     "L|IRC Appendix F|Radon-resistant construction is in an IRC appendix that applies only where adopted locally. Many Middle Tennessee counties are EPA Radon Zone 1 — Pinestone recommends testing.",
+     "P||Label the vent pipe and leave a junction box in the attic for a future fan if passive."
+    ]
+   }
+  },
+  {
+   "id": "bsmt.cracks",
+   "t": "Foundation wall crack repair",
+   "tr": "Foundation / Crawlspace",
+   "ph": "P04",
+   "d": [
+    "demo.clean"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='basement' && A.bsmtCracks"
+  },
+  {
+   "id": "bsmt.intdrain",
+   "t": "Interior perimeter drain & sump",
+   "tr": "Foundation / Crawlspace",
+   "ph": "P04",
+   "d": [
+    "bsmt.cracks",
+    "slab.scan"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='basement' && ['interior-drain','both'].includes(A.bsmtWater)"
+  },
+  {
+   "id": "bsmt.extwp",
+   "t": "Exterior excavation, waterproofing & footing drain",
+   "tr": "Foundation / Crawlspace",
+   "ph": "P04",
+   "d": [
+    "pre.811"
+   ],
+   "g": [
+    "cp.811"
+   ],
+   "f": [],
+   "w": "A.foundation==='basement' && ['exterior-membrane','both'].includes(A.bsmtWater)",
+   "G": {
+    "w": "Excavate, waterproof and drain the foundation from the exterior.",
+    "t": [
+     "C|IRC R406.2 / R405|Waterproofing required for foundation walls enclosing habitable space where high water table conditions exist; foundation drains required around foundations retaining earth and enclosing habitable space (with exceptions).",
+     "M||Membrane, protection board and drain mat per manufacturer."
+    ]
+   }
+  },
+  {
+   "id": "bsmt.sump",
+   "t": "Sump pump, check valve & discharge",
+   "tr": "Plumbing",
+   "ph": "P04",
+   "d": [
+    "bsmt.intdrain",
+    "bsmt.extwp"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='basement' && A.bsmtWater!=='none'"
+  },
+  {
+   "id": "bsmt.egress",
+   "t": "Basement egress window & window well",
+   "tr": "Foundation / Crawlspace",
+   "ph": "P04",
+   "d": [
+    "pre.eng"
+   ],
+   "g": [
+    "cp.permit"
+   ],
+   "f": [],
+   "w": "A.foundation==='basement' && A.bsmtFinish && A.bsmtEgress",
+   "G": {
+    "w": "Cut and install a code-compliant emergency escape opening for the finished basement.",
+    "t": [
+     "C|IRC R310.1 / R310.2|Emergency escape and rescue opening: minimum net clear opening (5.7 sq ft; 5.0 sq ft at grade floor), minimum 24 in. height and 20 in. width, and maximum 44 in. sill height above the floor.",
+     "C|IRC R310.2.3|Window wells: minimum 9 sq ft with 36 in. projection/width; ladder or steps when well is deeper than 44 in.",
+     "P||Have the engineer confirm the header for the cut foundation opening."
+    ]
+   }
+  },
+  {
+   "id": "bsmt.walls",
+   "t": "Basement wall insulation & framing",
+   "tr": "Framing",
+   "ph": "P04",
+   "d": [
+    "bsmt.intdrain",
+    "bsmt.cracks"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='basement' && A.bsmtFinish",
+   "G": {
+    "w": "Frame and insulate basement walls without trapping moisture.",
+    "t": [
+     "P||Use foam against concrete (or a capillary break) and treated bottom plates. Avoid interior poly vapor barriers over concrete walls.",
+     "C|IRC R316|Foam plastics need a thermal barrier (typically 1/2 in. gypsum) on the interior."
+    ]
+   }
+  },
+  {
+   "id": "frm.shore",
+   "t": "Temporary shoring for bearing-wall removal",
+   "tr": "Framing",
+   "ph": "P05",
+   "d": [
+    "pre.eng",
+    "demo.interior"
+   ],
+   "g": [
+    "cp.eng",
+    "cp.permit"
+   ],
+   "f": [],
+   "w": "has(A.structural,'remove-bearing-wall')",
+   "G": {
+    "w": "Support floor/roof loads on both sides of the bearing wall before it is removed.",
+    "t": [
+     "P||Shore walls on both sides, bearing on solid floor framing or posts down to grade where loads are large. Check what is under the shores.",
+     "P||Do not release shoring until beam, posts, connectors and point-load blocking are complete."
+    ]
+   }
+  },
+  {
+   "id": "frm.beam",
+   "t": "Install beam, posts & bearing per engineered design",
+   "tr": "Framing",
+   "ph": "P05",
+   "d": [
+    "frm.shore",
+    "fdn.footpour"
+   ],
+   "g": [
+    "cp.eng"
+   ],
+   "f": [],
+   "w": "has(A.structural,'remove-bearing-wall')",
+   "photo": true,
+   "q": [
+    "Beam size / plies / grade match the stamped design",
+    "Plies fastened per design",
+    "Bearing length at each end",
+    "Posts plumb and continuous to foundation"
+   ],
+   "G": {
+    "w": "Install the engineered beam and support posts with complete bearing and connections.",
+    "t": [
+     "C|IRC R301.1.3|Engineered elements must be installed as designed. Deviations require engineer approval.",
+     "M||LVL / PSL fastening of multiple plies per manufacturer or engineer schedule.",
+     "P||Photograph beam stamp/label, ply nailing, bearing, and posts before covering."
+    ],
+    "m": [
+     "Posts landing on subfloor with no blocking or footing below.",
+     "Missing ply fastening on multi-ply LVL."
+    ]
+   }
+  },
+  {
+   "id": "frm.loadpath",
+   "t": "Verify continuous load path & squash blocks",
+   "tr": "Framing",
+   "ph": "P05",
+   "d": [
+    "frm.beam"
+   ],
+   "g": [],
+   "f": [],
+   "w": "has(A.structural,'remove-bearing-wall')",
+   "photo": true,
+   "G": {
+    "w": "Confirm every new point load is carried through floor framing to a footing.",
+    "t": [
+     "P||Install solid blocking / squash blocks under every post through each floor level down to the girder or footing."
+    ]
+   }
+  },
+  {
+   "id": "frm.openings",
+   "t": "Frame new / enlarged exterior openings (headers, jacks, kings)",
+   "tr": "Framing",
+   "ph": "P05",
+   "d": [
+    "pre.eng",
+    "demo.interior",
+    "pre.order"
+   ],
+   "g": [
+    "cp.permit"
+   ],
+   "f": [],
+   "w": "has(A.structural,'new-exterior-opening') || (A.windows!=='none' && A.windowNewOpenings) || A.extDoors==='new-openings'",
+   "q": [
+    "Header size per R602.7 tables or engineer",
+    "Jack/king stud count per table",
+    "Rough openings match window/door order",
+    "Wall bracing compensated where panels removed"
+   ],
+   "G": {
+    "w": "Cut and frame new or resized exterior openings.",
+    "t": [
+     "C|IRC R602.7|Header sizes and jack/king stud counts per the header span tables based on loads above.",
+     "C|IRC R602.10|Removing sheathing/wall length can reduce required wall bracing. Confirm bracing still meets the prescriptive requirements or have it engineered.",
+     "M||Rough opening size per the window/door manufacturer (typically unit size + 1/2 in.)."
+    ]
+   }
+  },
+  {
+   "id": "frm.joists",
+   "t": "Floor framing repair / reinforcement",
+   "tr": "Framing",
+   "ph": "P05",
+   "d": [
+    "demo.assess"
+   ],
+   "g": [],
+   "f": [],
+   "w": "has(A.structural,'floor-joist-repair')"
+  },
+  {
+   "id": "frm.roof",
+   "t": "Roof framing repair / reinforcement",
+   "tr": "Framing",
+   "ph": "P05",
+   "d": [
+    "demo.assess"
+   ],
+   "g": [],
+   "f": [],
+   "w": "has(A.structural,'roof-framing-repair')",
+   "G": {
+    "w": "Repair or reinforce rafters, ridge and rafter ties.",
+    "t": [
+     "C|IRC R802|Rafter ties / ceiling joists resist rafter thrust. Do not remove ceiling joists or collar/rafter ties without an engineered alternative (ridge beam)."
+    ]
+   }
+  },
+  {
+   "id": "frm.vault",
+   "t": "Vaulted / raised ceiling framing per design",
+   "tr": "Framing",
+   "ph": "P05",
+   "d": [
+    "pre.eng",
+    "demo.interior"
+   ],
+   "g": [
+    "cp.eng"
+   ],
+   "f": [],
+   "w": "has(A.structural,'ceiling-raise')"
+  },
+  {
+   "id": "frm.stairs",
+   "t": "Stair framing",
+   "tr": "Framing",
+   "ph": "P05",
+   "d": [
+    "demo.interior"
+   ],
+   "g": [],
+   "f": [],
+   "w": "has(A.structural,'stair-modify')",
+   "q": [
+    "Riser max 7-3/4 in., tread min 10 in.",
+    "Largest-smallest riser/tread within 3/8 in.",
+    "Headroom 6 ft 8 in.",
+    "Width 36 in. min"
+   ],
+   "G": {
+    "w": "Frame new or altered stairs to code geometry.",
+    "t": [
+     "C|IRC R311.7|Stair width, headroom (6 ft 8 in.), riser height (7-3/4 in. max), tread depth (10 in. min), and uniformity (3/8 in. tolerance).",
+     "P||Lay out with finished floor thickness top and bottom — the most common cause of non-uniform first/last risers."
+    ]
+   }
+  },
+  {
+   "id": "frm.walls",
+   "t": "New interior partition walls / layout changes",
+   "tr": "Framing",
+   "ph": "P05",
+   "d": [
+    "demo.interior"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.layout"
+  },
+  {
+   "id": "frm.attic",
+   "t": "Attic access opening",
+   "tr": "Framing",
+   "ph": "P05",
+   "d": [
+    "demo.interior"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.attic",
+   "G": {
+    "w": "Provide a compliant attic access.",
+    "t": [
+     "C|IRC R807.1|Attic access minimum 22 in. × 30 in. rough opening with 30 in. headroom above, located in a hallway or readily accessible location.",
+     "C|IRC N1102.2.4|Access hatches/doors to be weatherstripped and insulated to the level of the surrounding surface (energy code)."
+    ]
+   }
+  },
+  {
+   "id": "frm.straighten",
+   "t": "Straighten / plane walls & ceilings for flat drywall",
+   "tr": "Framing",
+   "ph": "P05",
+   "d": [
+    "demo.interior",
+    "frm.walls",
+    "frm.beam"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Kitchen cabinet walls within 1/8 in. in 8 ft",
+    "Tile walls flat for large-format tile",
+    "Ceiling joists planed / furred where crowned"
+   ],
+   "G": {
+    "w": "Fix crowned, bowed and twisted framing before rough-ins so drywall, tile and cabinets come out flat.",
+    "t": [
+     "P||Use a long straightedge / string line on every kitchen and tile wall. Sister or plane — do not rely on drywall mud.",
+     "S|TCNA|Large-format tile substrates require tighter flatness (commonly 1/8 in. in 10 ft)."
+    ]
+   }
+  },
+  {
+   "id": "b.frame",
+   "t": "Bath framing: tub/shower walls, curbs, niches, recesses",
+   "tr": "Framing",
+   "ph": "P05",
+   "d": [
+    "demo.interior",
+    "frm.straighten"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath",
+   "q": [
+    "Shower walls plumb & flat",
+    "Niche framed to tile module, not on exterior wall",
+    "Curb / curbless recess per waterproofing system",
+    "Bench support framed"
+   ],
+   "G": {
+    "w": "Frame the bathroom for the selected tub/shower and waterproofing system.",
+    "t": [
+     "M||Curbless showers: recess and slope per the system manufacturer. Recessing joists requires an engineered solution (do not just cut joists down).",
+     "P||Frame niches to the tile layout — set the niche top/bottom on a full or half tile line. Avoid niches on exterior walls (insulation and condensation)."
+    ],
+    "m": [
+     "Cutting floor joists to recess a curbless shower without engineering.",
+     "Niche sized without looking at the tile module."
+    ]
+   }
+  },
+  {
+   "id": "frm.connectors",
+   "t": "Framing connectors & hardware (hangers, straps, hold-downs)",
+   "tr": "Framing",
+   "ph": "P05",
+   "d": [
+    "frm.beam",
+    "frm.openings",
+    "frm.joists",
+    "frm.roof",
+    "frm.vault",
+    "frm.walls"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.structural.length>0 || A.layout",
+   "photo": true,
+   "q": [
+    "Every hanger nail hole filled with specified nails",
+    "No drywall screws in connectors",
+    "Correct connector for lumber size",
+    "Corrosion-rated with treated lumber"
+   ],
+   "G": {
+    "w": "Install all specified hangers, straps and hold-downs with the correct fasteners.",
+    "t": [
+     "M||Install per the connector manufacturer (e.g. Simpson Strong-Tie) catalog: specified nail size/quantity — never drywall or deck screws.",
+     "C|IRC R317.3|Fasteners and connectors in contact with preservative-treated wood must be of the required corrosion-resistance.",
+     "P||Photograph connectors at the beam and posts with the nail pattern visible."
+    ],
+    "m": [
+     "Half-nailed hangers.",
+     "Using a top-flange hanger where face-mount was specified."
+    ]
+   }
+  },
+  {
+   "id": "frm.qc",
+   "t": "Framing QC walk",
+   "tr": "Pinestone (GC)",
+   "ph": "P05",
+   "d": [
+    "frm.straighten",
+    "frm.connectors",
+    "frm.stairs",
+    "frm.attic",
+    "b.frame@*"
+   ],
+   "g": [],
+   "f": [
+    "cp.framing"
+   ],
+   "q": [
+    "Plumb, level, square",
+    "Crowns aligned",
+    "Notches/bores within limits",
+    "Top plates tied where cut",
+    "Window/door ROs verified"
+   ]
+  },
+  {
+   "id": "frm.engobs",
+   "t": "Engineer structural observation visit",
+   "tr": "Engineer",
+   "ph": "P05",
+   "d": [
+    "frm.beam",
+    "frm.loadpath",
+    "frm.connectors"
+   ],
+   "g": [],
+   "f": [
+    "cp.engobs"
+   ],
+   "w": "A.engineer==='yes' || has(A.structural,'remove-bearing-wall') || has(A.structural,'ceiling-raise') || has(A.structural,'foundation-repair')"
+  },
+  {
+   "id": "roof.tearoff",
+   "t": "Roof tear-off & deck inspection",
+   "tr": "Roofing",
+   "ph": "P06",
+   "d": [
+    "pre.order",
+    "frm.roof"
+   ],
+   "g": [
+    "cp.permit"
+   ],
+   "f": [],
+   "w": "A.roof.startsWith('reroof')",
+   "q": [
+    "Weather window confirmed",
+    "Dry-in same day",
+    "Rotten / delaminated decking marked"
+   ]
+  },
+  {
+   "id": "roof.deck",
+   "t": "Replace damaged decking & re-nail",
+   "tr": "Roofing",
+   "ph": "P06",
+   "d": [
+    "roof.tearoff"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.roof.startsWith('reroof') && A.roofDeck!=='none'",
+   "q": [
+    "Panel edges on rafters, H-clips if required by span",
+    "Gaps per manufacturer",
+    "Nailing per IRC Table R602.3(1)"
+   ]
+  },
+  {
+   "id": "roof.ice",
+   "t": "Underlayment, ice barrier & drip edge",
+   "tr": "Roofing",
+   "ph": "P06",
+   "d": [
+    "roof.deck",
+    "roof.tearoff"
+   ],
+   "g": [],
+   "f": [
+    "cp.roof"
+   ],
+   "w": "A.roof.startsWith('reroof')",
+   "G": {
+    "w": "Install underlayment, eave/valley protection and drip edge per code and the shingle/metal manufacturer.",
+    "t": [
+     "C|IRC R905.2.7 / R905.2.8.5|Underlayment and drip edge required for asphalt shingles (drip edge at eaves and gables).",
+     "L|IRC R905.1.2|Ice barrier at eaves is required only where there has been a history of ice forming along the eaves — determined by the AHJ.",
+     "M||Underlayment type, laps and fastening per roofing manufacturer to keep the warranty."
+    ]
+   }
+  },
+  {
+   "id": "roof.flash",
+   "t": "Roof flashing: step, counter, kickout, valleys, pipe boots",
+   "tr": "Roofing",
+   "ph": "P06",
+   "d": [
+    "roof.ice"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.roof.startsWith('reroof')",
+   "photo": true,
+   "q": [
+    "Kickout flashing at every roof-to-wall termination",
+    "Step flashing (not continuous) at sidewalls",
+    "New pipe boots / flashings",
+    "Chimney counterflashing let into masonry"
+   ],
+   "G": {
+    "w": "Flash all roof transitions so water is directed onto the roof surface, not into walls.",
+    "t": [
+     "C|IRC R903.2|Flashing required at wall and roof intersections, changes of slope/direction, and around roof openings; kickout flashing where the eave of a roof intersects a wall.",
+     "M||Shingle manufacturer step-flashing and valley details."
+    ],
+    "m": [
+     "Missing kickout flashing — causes hidden wall rot below roof/wall intersections.",
+     "Reusing old cracked pipe boots."
+    ]
+   }
+  },
+  {
+   "id": "roof.vent",
+   "t": "Attic ventilation: ridge & soffit balance",
+   "tr": "Roofing",
+   "ph": "P06",
+   "d": [
+    "roof.ice"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.roofVent==='ridge-soffit'",
+   "G": {
+    "w": "Provide balanced intake and exhaust attic ventilation.",
+    "t": [
+     "C|IRC R806.1 / R806.2|Net free ventilating area 1/150 of the vented space, or 1/300 when conditions in R806.2 are met (e.g. upper/lower vent distribution).",
+     "C|IRC R806.3|Maintain at least 1 in. of airspace between insulation and roof sheathing at the vent — install baffles.",
+     "P||Do not mix ridge vents with gable or powered vents (short-circuits the ridge)."
+    ]
+   }
+  },
+  {
+   "id": "roof.cover",
+   "t": "Install roof covering",
+   "tr": "Roofing",
+   "ph": "P06",
+   "d": [
+    "roof.flash",
+    "roof.vent"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.roof.startsWith('reroof')"
+  },
+  {
+   "id": "roof.repair",
+   "t": "Roof repairs",
+   "tr": "Roofing",
+   "ph": "P06",
+   "d": [
+    "pre.order"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.roof==='repair'"
+  },
+  {
+   "id": "wrb.install",
+   "t": "Water-resistive barrier (housewrap) & tapes",
+   "tr": "Siding / Exterior",
+   "ph": "P06",
+   "d": [
+    "frm.openings",
+    "demo.interior"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.siding.startsWith('full') || (A.windows!=='none' && A.windowType==='new-construction')",
+   "photo": true,
+   "q": [
+    "Shingle-lapped (upper over lower)",
+    "Seams taped per manufacturer",
+    "Integrated with window/door flashing",
+    "Tears repaired"
+   ],
+   "G": {
+    "w": "Install a continuous weather-resistive barrier integrated with all flashings.",
+    "t": [
+     "C|IRC R703.2|A water-resistive barrier is required over sheathing behind exterior veneer, lapped and continuous to the top of walls and terminated at penetrations and building appendages.",
+     "M||Housewrap laps, fasteners, and tape per manufacturer."
+    ]
+   }
+  },
+  {
+   "id": "win.install",
+   "t": "Install windows with flashing sequence",
+   "tr": "Windows & Doors",
+   "ph": "P06",
+   "d": [
+    "pre.order",
+    "frm.openings",
+    "wrb.install"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.windows!=='none'",
+   "photo": true,
+   "q": [
+    "Sill pan / sloped sill flashing installed",
+    "Jamb flashing then head flashing (shingle order)",
+    "Shimmed at manufacturer locations, operable & square",
+    "Low-expansion foam, not standard foam",
+    "Egress & safety glazing verified"
+   ],
+   "G": {
+    "w": "Install windows plumb, level and square with a flashing sequence that drains water to the exterior.",
+    "t": [
+     "C|IRC R703.4|Flashing required at window and door openings, installed to prevent water entry into the wall cavity and per the fenestration manufacturer instructions (or pan flashing / flashing details where no instructions are provided).",
+     "M||Installation instructions of the specific window: sill pan, shim points, fastening, sealant. Deviations can void the warranty.",
+     "C|IRC R308.4|Safety glazing in hazardous locations (e.g. within 24 in. of doors, large panes near floors, at tubs/showers, at stairs)."
+    ],
+    "m": [
+     "Taping the sill flange (traps water). Leave the bottom of the sill flashing unsealed to drain or follow the manufacturer.",
+     "Over-driving fasteners and racking the frame."
+    ]
+   }
+  },
+  {
+   "id": "win.verify",
+   "t": "Verify egress, safety glazing & fall protection",
+   "tr": "Pinestone (GC)",
+   "ph": "P06",
+   "d": [
+    "win.install"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.windows!=='none'",
+   "G": {
+    "w": "Check every sleeping room window and hazardous location after installation.",
+    "t": [
+     "C|IRC R310|Sleeping rooms require an emergency escape opening meeting net clear opening and sill height limits. Replacement windows have an exception (R310.2.5) for existing openings — confirm with the AHJ.",
+     "C|IRC R312.2|Window fall protection where the opening is less than 24 in. above the floor and more than 72 in. above grade.",
+     "C|IRC R308.4 / R308.1|Safety glazing labeled in all hazardous locations."
+    ]
+   }
+  },
+  {
+   "id": "door.ext",
+   "t": "Install exterior doors (sill pan, flashing, threshold)",
+   "tr": "Windows & Doors",
+   "ph": "P06",
+   "d": [
+    "pre.order",
+    "frm.openings",
+    "wrb.install"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.extDoors!=='none'",
+   "photo": true,
+   "q": [
+    "Sill pan with back dam",
+    "Threshold supported fully",
+    "Reveal even, latches without force",
+    "Deadbolt / strike screws into framing"
+   ]
+  },
+  {
+   "id": "dryin.check",
+   "t": "Dry-in verification (hose test windows / doors)",
+   "tr": "Pinestone (GC)",
+   "ph": "P06",
+   "d": [
+    "win.install",
+    "door.ext",
+    "roof.cover",
+    "roof.repair",
+    "wrb.install"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.windows!=='none' || A.extDoors!=='none' || A.roof.startsWith('reroof')",
+   "G": {
+    "w": "Prove the openings and roof are watertight before insulation and drywall.",
+    "t": [
+     "P||Spray test a sample of windows and every door from the bottom up while someone watches the interior side. Check after the first heavy rain."
+    ]
+   }
+  },
+  {
+   "id": "plb.layout",
+   "t": "Plumbing layout walk with trade",
+   "tr": "Pinestone (GC)",
+   "ph": "P07",
+   "d": [
+    "pre.selections",
+    "demo.assess"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.plumbing!=='none'",
+   "q": [
+    "Fixture spec sheets on site",
+    "Fixture centerlines marked",
+    "Valve heights/locations marked",
+    "Water heater & manifold location set"
+   ],
+   "G": {
+    "w": "Walk every fixture location with the plumber before rough-in using the actual fixture specifications.",
+    "t": [
+     "P||Bring spec sheets for every fixture: rough-in heights for vanity drains and supplies, valve depth range, toilet rough distance, freestanding tub drain location.",
+     "C|IRC R307.1|Fixture clearances: water closet centerline 15 in. min to a side wall/obstruction, 21 in. clear in front; 24 in. clear in front of shower openings."
+    ]
+   }
+  },
+  {
+   "id": "plb.service",
+   "t": "New water service line (meter to house)",
+   "tr": "Plumbing",
+   "ph": "P07",
+   "d": [
+    "pre.811"
+   ],
+   "g": [
+    "cp.811",
+    "cp.permit"
+   ],
+   "f": [],
+   "w": "A.plumbing!=='none' && A.waterService",
+   "G": {
+    "w": "Replace the service line with proper depth, sleeving and a main shutoff.",
+    "t": [
+     "L||Pipe depth, tracer wire, and meter-side work responsibility are set by the water utility and AHJ.",
+     "C|IRC P2903.3 / P2903.9|Pressure must not exceed 80 psi static at fixtures (install a PRV if higher); main shutoff valve required."
+    ]
+   }
+  },
+  {
+   "id": "plb.sewer",
+   "t": "Sewer lateral camera & replacement",
+   "tr": "Plumbing",
+   "ph": "P07",
+   "d": [
+    "demo.clean"
+   ],
+   "g": [
+    "cp.811"
+   ],
+   "f": [],
+   "w": "A.plumbing!=='none' && A.sewerLateral!=='none'",
+   "G": {
+    "w": "Camera the lateral to the main; replace or repair as needed.",
+    "t": [
+     "P||Save the camera video file and footage locations. Scope again after replacement.",
+     "L||Connections in the right-of-way often require a separate utility permit / inspection."
+    ]
+   }
+  },
+  {
+   "id": "plb.dwv",
+   "t": "DWV rough-in (drains, vents, cleanouts)",
+   "tr": "Plumbing",
+   "ph": "P07",
+   "d": [
+    "plb.layout",
+    "frm.straighten",
+    "b.frame@*",
+    "slab.patch",
+    "crawl.sister"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.plumbing!=='none' && A.dwv!=='none'",
+   "photo": true,
+   "q": [
+    "Slope 1/4 in./ft (≤2-1/2 in.) or 1/8 in./ft (≥3 in.)",
+    "Cleanouts accessible",
+    "Vents rise before horizontal",
+    "Long-sweep fittings where required",
+    "Support spacing per material"
+   ],
+   "G": {
+    "w": "Install drain, waste and vent piping with correct slope, venting and accessible cleanouts.",
+    "t": [
+     "C|IRC P3005.3|Horizontal drainage slope: 1/4 in. per foot for pipe 2-1/2 in. and smaller; 1/8 in. per foot for 3 in. and larger.",
+     "C|IRC P3005.2|Cleanouts required (e.g. at base of stacks, changes of direction over 45°, every 100 ft) and must be accessible.",
+     "L|IRC P3114|Air admittance valves are allowed by the IRC but local acceptance varies; confirm before relying on them (islands)."
+    ],
+    "m": [
+     "Flat drain runs to make a joist cut easier.",
+     "Burying cleanouts behind drywall or tile with no access panel."
+    ]
+   }
+  },
+  {
+   "id": "plb.supply",
+   "t": "Water supply rough-in (manifold, home runs, shutoffs)",
+   "tr": "Plumbing",
+   "ph": "P07",
+   "d": [
+    "plb.layout",
+    "b.frame@*"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.plumbing!=='none'",
+   "photo": true,
+   "q": [
+    "PEX supported per manufacturer, no kinks",
+    "Stub-outs secured (drop-ear / brackets)",
+    "Hot on left",
+    "Manifold accessible and labeled"
+   ]
+  },
+  {
+   "id": "plb.nailplates",
+   "t": "Nail plates at all pipes within 1-1/4 in. of framing face",
+   "tr": "Plumbing",
+   "ph": "P07",
+   "d": [
+    "plb.dwv",
+    "plb.supply"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.plumbing!=='none'",
+   "photo": true,
+   "G": {
+    "w": "Protect piping from drywall and trim fasteners.",
+    "t": [
+     "C|IRC P2603.2.1|Pipes passing through framing within 1-1/4 in. of the edge (or notched) must be protected by steel shield plates at least 1/16 in. thick (0.0575 in.) extending 2 in. beyond the pipe (verify dimensions in your edition).",
+     "P||Plate both faces at every bore near the edge, including top/bottom plates at stacks."
+    ],
+    "m": [
+     "Missing plates at vanity walls and toilet supplies — classic drywall-screw leak."
+    ]
+   }
+  },
+  {
+   "id": "plb.boring",
+   "t": "Verify bored / notched framing within limits",
+   "tr": "Framing",
+   "ph": "P07",
+   "d": [
+    "plb.dwv",
+    "plb.supply",
+    "hvac.ducts",
+    "ele.rough"
+   ],
+   "g": [],
+   "f": [],
+   "photo": true,
+   "q": [
+    "Stud holes/notches within limits",
+    "Top plates cut >50% tied with metal strap",
+    "Joist holes not in top/bottom 2 in. or near bearing",
+    "Over-cut members reinforced"
+   ],
+   "G": {
+    "w": "Walk all framing after trades bore and notch; repair violations before inspection.",
+    "t": [
+     "C|IRC R602.6|Bearing-wall studs: notches ≤25% of width, bored holes ≤40% (≤60% when doubled), holes ≥5/8 in. from the edge.",
+     "C|IRC R602.6.1|Top plates cut more than 50% need a 16-ga. steel tie (1-1/2 in. wide) with fasteners each side.",
+     "C|IRC R502.8|Joist notches/holes limited in size and location (no notches in middle third; holes ≤1/3 depth, ≥2 in. from edges)."
+    ]
+   }
+  },
+  {
+   "id": "b.tub",
+   "t": "Set tub & verify support / leveling",
+   "tr": "Plumbing",
+   "ph": "P07",
+   "d": [
+    "b.frame",
+    "plb.dwv"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath",
+   "w": "['tile-tub','tub-surround'].includes(B.shower)",
+   "q": [
+    "Tub level, bed/support per manufacturer",
+    "Overflow & drain tested",
+    "Ledger / flange supported",
+    "Air barrier behind tub on exterior walls"
+   ],
+   "G": {
+    "w": "Set the tub before walls so it can be supported, leveled and integrated with waterproofing.",
+    "t": [
+     "M||Mortar bed / support per tub manufacturer (common for acrylic/steel tubs).",
+     "C|IRC N1102.4.1.1 (Table)|Exterior walls behind tubs/showers need insulation and an air barrier separating them from the tub."
+    ]
+   }
+  },
+  {
+   "id": "b.valve",
+   "t": "Shower / tub valve rough: depth, height, pressure-balance",
+   "tr": "Plumbing",
+   "ph": "P07",
+   "d": [
+    "b.frame",
+    "plb.supply"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath",
+   "w": "B.shower!=='none'",
+   "photo": true,
+   "q": [
+    "Valve depth within manufacturer range for total wall thickness (backer + membrane + tile)",
+    "Plaster guard / test cap on",
+    "Valve centered & level",
+    "Shower head & handheld heights per layout",
+    "Blocking for valve & heads"
+   ],
+   "G": {
+    "w": "Set valve bodies at the right depth for the final tile wall and confirm anti-scald protection.",
+    "t": [
+     "M||Rough-in depth range is a manufacturer specification printed on the valve body / plaster guard. Calculate finished wall = backer + waterproofing + mortar + tile.",
+     "C|IRC P2708.4|Shower and tub-shower control valves must be pressure-balance, thermostatic-mixing or combination type with a high-limit stop set at max 120°F.",
+     "P||Photograph each valve with a tape from floor and from a corner. Record depth from stud face in the task notes."
+    ],
+    "m": [
+     "Valve set too deep for thin foam-board systems — trim kit will not reach.",
+     "Forgetting blocking for handheld slide bars and body sprays."
+    ]
+   }
+  },
+  {
+   "id": "b.drain",
+   "t": "Shower drain set for waterproofing system",
+   "tr": "Plumbing",
+   "ph": "P07",
+   "d": [
+    "b.frame",
+    "plb.dwv"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath",
+   "w": "['tile-tub','tile-shower-curb','tile-curbless'].includes(B.shower) && B.shower!=='tile-tub'",
+   "G": {
+    "w": "Install the drain body compatible with the chosen waterproofing system.",
+    "t": [
+     "M||Bonding-flange drains for sheet/foam systems; clamping drain with weep holes for traditional mortar-bed liners. Match the system manufacturer — mixed systems void warranties.",
+     "C|IRC P2709|Shower receptors / liners, drain connection and slope requirements."
+    ]
+   }
+  },
+  {
+   "id": "b.rough",
+   "t": "Bath fixture rough: toilet, vanity, tub filler",
+   "tr": "Plumbing",
+   "ph": "P07",
+   "d": [
+    "plb.dwv",
+    "plb.supply",
+    "b.frame"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath",
+   "q": [
+    "Toilet flange at rough distance from FINISHED wall",
+    "Flange height accounts for finished floor",
+    "Vanity drain/supplies at spec heights",
+    "Freestanding tub drain location verified"
+   ]
+  },
+  {
+   "id": "plb.kitchen",
+   "t": "Kitchen plumbing rough (sink, DW, ice maker, pot filler)",
+   "tr": "Plumbing",
+   "ph": "P07",
+   "d": [
+    "plb.dwv",
+    "plb.supply",
+    "pre.selections"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.plumbing!=='none' && A.kitchen!=='none'",
+   "q": [
+    "Sink drain height fits sink depth / disposal",
+    "Ice maker box located",
+    "Island venting method approved",
+    "Pot filler blocking & stub height"
+   ]
+  },
+  {
+   "id": "plb.laundry",
+   "t": "Laundry rough (washer box, standpipe, pan)",
+   "tr": "Plumbing",
+   "ph": "P07",
+   "d": [
+    "plb.dwv",
+    "plb.supply"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.plumbing!=='none' && A.laundry!=='none'",
+   "G": {
+    "w": "Rough the washer box and drain.",
+    "t": [
+     "C|IRC P2706.2|Standpipe height 18–42 in. above the trap weir (verify in your edition).",
+     "P||Pinestone standard: washer pan with drain or leak sensor shutoff when the laundry is over finished space."
+    ]
+   }
+  },
+  {
+   "id": "plb.wh",
+   "t": "Water heater rough: location, T&P discharge, pan, expansion",
+   "tr": "Plumbing",
+   "ph": "P07",
+   "d": [
+    "plb.supply"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.plumbing!=='none' && A.waterHeater!=='none'",
+   "G": {
+    "w": "Install the water heater with code-required safety discharge and protection.",
+    "t": [
+     "C|IRC P2804.6.1|T&P relief discharge piping full size, by gravity, terminating within 6 in. of the floor or to an approved location, no valves or threaded ends.",
+     "C|IRC P2801.6|Pan required where leakage would damage the building; drained to an approved location.",
+     "C|IRC P2903.4|Thermal expansion control where a backflow preventer / check valve / PRV creates a closed system.",
+     "M||Clearances, venting (gas) and condensate (heat pump, tankless) per manufacturer."
+    ]
+   }
+  },
+  {
+   "id": "plb.hosebib",
+   "t": "Frost-free hose bibs with backflow protection",
+   "tr": "Plumbing",
+   "ph": "P07",
+   "d": [
+    "plb.supply"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.plumbing!=='none' && A.hoseBibs",
+   "G": {
+    "w": "Install hose connections with vacuum breakers and slope for freeze protection.",
+    "t": [
+     "C|IRC P2902.4.3|Hose connections require a hose-connection vacuum breaker (or integral backflow protection).",
+     "M||Frost-free sillcocks installed with downward slope to drain."
+    ]
+   }
+  },
+  {
+   "id": "plb.test",
+   "t": "DWV & water supply pressure tests",
+   "tr": "Plumbing",
+   "ph": "P07",
+   "d": [
+    "plb.dwv",
+    "plb.supply",
+    "b.rough@*",
+    "b.valve@*",
+    "b.drain@*",
+    "plb.kitchen",
+    "plb.laundry"
+   ],
+   "g": [],
+   "f": [
+    "cp.rough-plb"
+   ],
+   "w": "A.plumbing!=='none'",
+   "photo": true,
+   "q": [
+    "DWV test on (water head or air) and holding",
+    "Supply under pressure and holding",
+    "Gauge photographed with time stamp"
+   ],
+   "G": {
+    "w": "Test the rough piping before inspection and before it is concealed.",
+    "t": [
+     "C|IRC P2503.5.1|Rough DWV test: water test (10 ft head) or air test (5 psi) held for 15 minutes.",
+     "C|IRC P2503.7|Water supply system test: working pressure water test or air test per the code / material listing (PEX manufacturers limit air testing).",
+     "M||PEX manufacturer test procedure and pressures."
+    ]
+   }
+  },
+  {
+   "id": "gas.service",
+   "t": "Gas service / meter coordination with utility",
+   "tr": "Utility",
+   "ph": "P07",
+   "d": [
+    "pre.811"
+   ],
+   "g": [
+    "cp.811"
+   ],
+   "f": [],
+   "w": "A.gas==='new-service'"
+  },
+  {
+   "id": "gas.pipe",
+   "t": "Gas piping rough: sizing, bonding, drips, shutoffs",
+   "tr": "Gas",
+   "ph": "P07",
+   "d": [
+    "plb.layout",
+    "frm.straighten"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.gas!=='none'",
+   "photo": true,
+   "q": [
+    "Pipe sized for total connected load & length",
+    "Appliance shutoff in same room within 6 ft",
+    "Sediment traps at appliances",
+    "CSST bonded per manufacturer/code",
+    "Striker plates on CSST"
+   ],
+   "G": {
+    "w": "Install gas piping sized for the connected load with required valves, sediment traps and bonding.",
+    "t": [
+     "C|IRC G2413|Piping sized for the maximum demand and length using the code sizing tables.",
+     "C|IRC G2420.5|Accessible shutoff valve for each appliance, in the same room and within 6 ft (with listed exceptions).",
+     "C|IRC G2419.4|Sediment trap at appliance inlets (except listed exceptions such as ranges/dryers in some editions).",
+     "C|IRC G2411.1.1|CSST systems bonded to the electrical grounding electrode system (not less than 6 AWG copper) unless listed arc-resistant jacketed CSST is used per manufacturer.",
+     "M||CSST striker plates and bonding per the CSST manufacturer."
+    ]
+   }
+  },
+  {
+   "id": "gas.test",
+   "t": "Gas pressure test & tag",
+   "tr": "Gas",
+   "ph": "P07",
+   "d": [
+    "gas.pipe"
+   ],
+   "g": [],
+   "f": [
+    "cp.rough-gas",
+    "cp.gasrelease"
+   ],
+   "w": "A.gas!=='none'",
+   "photo": true,
+   "G": {
+    "w": "Pressure test the gas system for inspection.",
+    "t": [
+     "C|IRC G2417|Test pressure not less than 1.5 times working pressure but not less than 3 psig, held at least 10 minutes with no drop (verify in your edition).",
+     "L||Some AHJs and utilities require specific gauges/durations. Confirm before scheduling."
+    ]
+   }
+  },
+  {
+   "id": "hvac.design",
+   "t": "Load calculation & duct design (Manual J / S / D)",
+   "tr": "HVAC",
+   "ph": "P08",
+   "d": [
+    "pre.scope"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.hvac==='full'",
+   "G": {
+    "w": "Size equipment and ducts from a room-by-room load calculation.",
+    "t": [
+     "C|IRC M1401.3|Heating and cooling equipment sized per ACCA Manual S based on loads calculated with ACCA Manual J.",
+     "C|IRC M1601.1|Duct systems designed per ACCA Manual D (or equivalent).",
+     "P||Ask for the report. Undersized returns are the most common comfort/noise complaint."
+    ]
+   }
+  },
+  {
+   "id": "hvac.equip",
+   "t": "Equipment locations: air handler, condenser, line set, condensate",
+   "tr": "HVAC",
+   "ph": "P08",
+   "d": [
+    "hvac.design",
+    "demo.assess"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.hvac!=='none'",
+   "q": [
+    "Service clearances per manufacturer",
+    "Attic air handler: platform, light, receptacle, walkway",
+    "Condenser location clear of windows/dryer vent"
+   ],
+   "G": {
+    "w": "Set locations that meet access and clearance requirements.",
+    "t": [
+     "C|IRC M1305.1.3|Appliances in attics: passageway and service space, lighting and receptacle near the appliance (verify sizes in your edition).",
+     "M||Clearances and orientation per equipment manufacturer."
+    ]
+   }
+  },
+  {
+   "id": "hvac.ducts",
+   "t": "Duct rough-in (trunks, branches, returns)",
+   "tr": "HVAC",
+   "ph": "P08",
+   "d": [
+    "hvac.design",
+    "hvac.equip",
+    "frm.straighten",
+    "crawl.sister"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.hvac==='full' && A.hvacType!=='ductless'",
+   "photo": true,
+   "q": [
+    "Flex pulled tight, supported, no kinks or compressions",
+    "Return path from every bedroom (return or transfer)",
+    "Boot locations clear of joists/cabinets",
+    "No ducts in exterior walls"
+   ]
+  },
+  {
+   "id": "hvac.seal",
+   "t": "Seal duct joints, seams & plenums (mastic)",
+   "tr": "HVAC",
+   "ph": "P08",
+   "d": [
+    "hvac.ducts"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.hvac==='full' && A.hvacType!=='ductless'",
+   "photo": true,
+   "G": {
+    "w": "Seal every joint and seam so the system can pass a leakage test.",
+    "t": [
+     "C|IRC M1601.4.1|Joints, seams and connections sealed with listed tapes, mastics or gaskets — not standard cloth duct tape.",
+     "C|IRC N1103.3.1|Supply and return ducts in attics insulated to R-8 (≥3 in. diameter) and R-6 elsewhere outside the building envelope (2018 IECC values; confirm edition).",
+     "P||Mastic every takeoff, boot collar, and plenum seam; photograph before insulation wrap."
+    ],
+    "m": [
+     "Sealing only the trunk and skipping boot-to-drywall and takeoffs."
+    ]
+   }
+  },
+  {
+   "id": "hvac.lineset",
+   "t": "Line set, condensate & penetrations",
+   "tr": "HVAC",
+   "ph": "P08",
+   "d": [
+    "hvac.equip"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.hvac!=='none'",
+   "q": [
+    "Suction line insulated",
+    "Penetrations sealed and flashed",
+    "Condensate trapped (where required) and sloped"
+   ]
+  },
+  {
+   "id": "hvac.condensate",
+   "t": "Condensate drain & secondary protection",
+   "tr": "HVAC",
+   "ph": "P08",
+   "d": [
+    "hvac.equip"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.hvac!=='none'",
+   "G": {
+    "w": "Install primary condensate drain and secondary protection where overflow could damage the building.",
+    "t": [
+     "C|IRC M1411.3 / M1411.3.1|Condensate disposed to an approved location; auxiliary drain pan or overflow shutoff device where damage could occur (e.g. attic air handlers).",
+     "P||Pinestone standard: float switch on every attic or above-ceiling unit even with a secondary pan."
+    ]
+   }
+  },
+  {
+   "id": "hvac.minisplit",
+   "t": "Ductless heads: locations, line routes, blocking",
+   "tr": "HVAC",
+   "ph": "P08",
+   "d": [
+    "hvac.equip"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.hvac!=='none' && A.hvacType==='ductless'"
+  },
+  {
+   "id": "b.fan",
+   "t": "Bath exhaust fan: ducted to exterior termination",
+   "tr": "HVAC",
+   "ph": "P08",
+   "d": [
+    "b.frame"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath",
+   "photo": true,
+   "q": [
+    "Duct terminates OUTDOORS (roof/wall cap with damper), not into attic or soffit",
+    "Smooth / rigid duct, short and sloped to exterior",
+    "Duct insulated in unconditioned space",
+    "Fan rated airflow meets required rate"
+   ],
+   "G": {
+    "w": "Install the bath fan so moisture actually leaves the house.",
+    "t": [
+     "C|IRC M1501.1|Exhaust air discharged to the outdoors — not into attics, crawlspaces, or soffit vents where it can re-enter.",
+     "C|IRC R303.3 / Ch. 15 local exhaust table|Bathrooms with a tub/shower need local exhaust (commonly 50 cfm intermittent or 20 cfm continuous) where a window is not used. Confirm in your edition.",
+     "P||Pinestone standard: fan in every bath with a shower regardless of windows; humidity-sensing or timer control."
+    ],
+    "m": [
+     "Pointing the duct at a soffit vent (moisture comes back in).",
+     "Long flex runs with sags that collect condensate."
+    ]
+   }
+  },
+  {
+   "id": "hvac.hood",
+   "t": "Range hood duct & make-up air",
+   "tr": "HVAC",
+   "ph": "P08",
+   "d": [
+    "pre.selections",
+    "frm.straighten"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.kitchen!=='none' && A.rangeHood==='ducted'",
+   "G": {
+    "w": "Duct the range hood to the exterior at the manufacturer duct size.",
+    "t": [
+     "C|IRC M1503|Range hood ducts: smooth metal, air-tight, with a backdraft damper, terminating outdoors.",
+     "C|IRC M1503.6 (2018)|Hoods exceeding 400 cfm require make-up air (section number varies by edition).",
+     "M||Duct size, maximum length and transition rules per hood manufacturer."
+    ]
+   }
+  },
+  {
+   "id": "hvac.dryer",
+   "t": "Dryer exhaust duct",
+   "tr": "HVAC",
+   "ph": "P08",
+   "d": [
+    "frm.straighten"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.dryerVent",
+   "G": {
+    "w": "Install a compliant dryer exhaust.",
+    "t": [
+     "C|IRC M1502|Dryer exhaust: independent, terminates outdoors with a backdraft damper and no screen; 4 in. smooth metal duct; length limit (35 ft less fitting allowances) unless manufacturer allows longer; joints not fastened with screws protruding into the duct.",
+     "P||Install a dryer vent box in the wall to avoid crushed transition ducts."
+    ]
+   }
+  },
+  {
+   "id": "hvac.freshair",
+   "t": "Whole-house mechanical ventilation",
+   "tr": "HVAC",
+   "ph": "P08",
+   "d": [
+    "hvac.ducts",
+    "hvac.equip"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.hvac!=='none' && A.freshAir",
+   "G": {
+    "w": "Provide balanced or supply/exhaust ventilation.",
+    "t": [
+     "C|IRC M1505 (2018) / R303.4|Whole-house mechanical ventilation is required when the dwelling unit is tested below a specified air leakage rate (e.g. less than 5 ACH50). Confirm applicability for alterations."
+    ]
+   }
+  },
+  {
+   "id": "hvac.combustion",
+   "t": "Combustion air & venting for gas appliances",
+   "tr": "HVAC",
+   "ph": "P08",
+   "d": [
+    "gas.pipe",
+    "hvac.equip"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.gas!=='none' && (has(A.gasAppliances,'furnace') || has(A.gasAppliances,'water-heater') || has(A.gasAppliances,'fireplace'))",
+   "G": {
+    "w": "Verify combustion air and venting for each gas appliance.",
+    "t": [
+     "C|IRC G2407|Combustion, ventilation and dilution air per appliance input and room volume.",
+     "C|IRC G2425–G2427|Vent connector sizing, clearances, termination; orphaned water heaters on oversized chimneys need re-evaluation.",
+     "M||Direct-vent and high-efficiency venting per manufacturer."
+    ]
+   }
+  },
+  {
+   "id": "hvac.terminations",
+   "t": "Exterior terminations flashed & clear of openings",
+   "tr": "Pinestone (GC)",
+   "ph": "P08",
+   "d": [
+    "b.fan@*",
+    "hvac.hood",
+    "hvac.dryer",
+    "hvac.lineset",
+    "hvac.combustion"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Each termination flashed (mounting block / roof jack)",
+    "Dampers move freely",
+    "Clearances from windows/doors per code/manufacturer"
+   ]
+  },
+  {
+   "id": "ele.walk",
+   "t": "Electrical walk: devices, fixtures, switching, cabinet layout",
+   "tr": "Pinestone (GC)",
+   "ph": "P09",
+   "d": [
+    "pre.selections",
+    "frm.straighten"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.electrical!=='none'",
+   "q": [
+    "Every receptacle/switch marked on studs",
+    "Fixture boxes centered on rooms/cabinets",
+    "Under-cabinet & vanity light locations",
+    "Dimmer/smart switch box depth"
+   ],
+   "G": {
+    "w": "Mark every box with the electrician using cabinet drawings and fixture specs.",
+    "t": [
+     "P||Mark vanity lights to the mirror size, pendants to the island centerline, and switch locations on the latch side of doors.",
+     "C|NEC 210.52|Receptacle spacing rules for dwelling walls and countertops (e.g. no point along a wall more than 6 ft from a receptacle; countertop spacing)."
+    ]
+   }
+  },
+  {
+   "id": "ele.service",
+   "t": "Service / panel upgrade: meter base, mast, grounding & bonding",
+   "tr": "Electrical",
+   "ph": "P09",
+   "d": [
+    "pre.utilities"
+   ],
+   "g": [],
+   "f": [
+    "cp.service"
+   ],
+   "w": "A.electrical!=='none' && A.service!=='none'",
+   "photo": true,
+   "q": [
+    "Working space in front of panel",
+    "Grounding electrode system complete",
+    "Water and gas piping bonded",
+    "Utility clearances for mast/drop"
+   ],
+   "G": {
+    "w": "Upgrade or replace the service with a complete grounding and bonding system.",
+    "t": [
+     "C|NEC 110.26|Working space in front of the panel (generally 36 in. deep, 30 in. wide, 6.5 ft high).",
+     "C|NEC 250.50 / 250.53|Grounding electrode system; a single rod must meet resistance limits or be supplemented (commonly two rods 6 ft apart).",
+     "C|NEC 250.104|Bonding of metal water piping and other metal piping (gas) likely to become energized.",
+     "L||Meter base, mast height and disconnect location requirements come from the serving utility (e.g. NES, MTEMC). Coordinate the cut-over date."
+    ]
+   }
+  },
+  {
+   "id": "ele.rough",
+   "t": "Branch circuit rough-in (boxes, wiring, home runs)",
+   "tr": "Electrical",
+   "ph": "P09",
+   "d": [
+    "ele.walk",
+    "plb.dwv",
+    "hvac.ducts"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.electrical!=='none'",
+   "photo": true,
+   "q": [
+    "Box depth set for finish (tile, wainscot)",
+    "Cable stapled within 12 in. of boxes",
+    "Cables not in contact with ducts/flue",
+    "Box fill within limits"
+   ],
+   "G": {
+    "w": "Install boxes and wiring after plumbing and ducts so electrical routes around larger trades.",
+    "t": [
+     "C|NEC 314.20|Boxes set back no more than 1/4 in. in noncombustible surfaces; flush with combustible surfaces — plan for tile and backsplash thickness.",
+     "C|NEC 314.16|Box fill calculations.",
+     "C|NEC 334.30|NM cable supported within 12 in. of boxes and at intervals not exceeding 4-1/2 ft."
+    ]
+   }
+  },
+  {
+   "id": "ele.kitchen",
+   "t": "Kitchen circuits & countertop receptacles",
+   "tr": "Electrical",
+   "ph": "P09",
+   "d": [
+    "ele.walk",
+    "pre.selections"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.electrical!=='none' && A.kitchen!=='none'",
+   "q": [
+    "Two+ 20A small-appliance circuits",
+    "Dedicated DW, disposal, microwave, refrigerator (as specified)",
+    "Range circuit matches appliance",
+    "Island receptacle per adopted NEC edition"
+   ],
+   "G": {
+    "w": "Provide required kitchen circuits and countertop receptacles.",
+    "t": [
+     "C|NEC 210.11(C)(1)|At least two 20A small-appliance branch circuits for kitchen countertop receptacles.",
+     "C|NEC 210.52(C)|Countertop receptacle spacing (no point more than 24 in. from a receptacle along the wall line); island/peninsula rules changed in the 2023 NEC — follow the edition adopted by the AHJ.",
+     "C|NEC 210.8(A)|GFCI protection for kitchen receptacles (scope expands with newer editions).",
+     "M||Appliance circuit sizes from the appliance installation guides."
+    ]
+   }
+  },
+  {
+   "id": "b.elec",
+   "t": "Bath circuits: 20A receptacle, GFCI, fan, lights",
+   "tr": "Electrical",
+   "ph": "P09",
+   "d": [
+    "ele.walk",
+    "b.frame"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath",
+   "w": "A.electrical!=='none'",
+   "q": [
+    "20A bath receptacle circuit",
+    "GFCI protection",
+    "Receptacle within 36 in. of each basin",
+    "Fan circuit & switching / humidity control",
+    "Light fixtures rated for damp/wet location in shower zone"
+   ],
+   "G": {
+    "w": "Wire each bathroom to code with GFCI protection and fixtures rated for the location.",
+    "t": [
+     "C|NEC 210.11(C)(3)|At least one 20A circuit for bathroom receptacle outlets.",
+     "C|NEC 210.52(D)|Receptacle within 3 ft of the outside edge of each basin.",
+     "C|NEC 410.10(D)|Luminaires in tub/shower zones must be listed for damp (or wet, if subject to shower spray) locations."
+    ]
+   }
+  },
+  {
+   "id": "ele.laundry",
+   "t": "Laundry circuit(s)",
+   "tr": "Electrical",
+   "ph": "P09",
+   "d": [
+    "ele.walk"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.electrical!=='none' && A.laundry!=='none'",
+   "G": {
+    "w": "Laundry receptacle circuit and dryer circuit.",
+    "t": [
+     "C|NEC 210.11(C)(2)|At least one 20A circuit for laundry receptacle outlets.",
+     "M||Dryer circuit per dryer nameplate (electric) or 120V receptacle (gas dryer)."
+    ]
+   }
+  },
+  {
+   "id": "ele.afci",
+   "t": "AFCI / GFCI protection plan per adopted NEC",
+   "tr": "Electrical",
+   "ph": "P09",
+   "d": [
+    "ele.walk"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.electrical!=='none'",
+   "G": {
+    "w": "Confirm which circuits require AFCI and GFCI protection under the locally adopted NEC.",
+    "t": [
+     "C|NEC 210.12|AFCI protection for most dwelling 120V 15/20A branch circuits; extensions/modifications of existing circuits also trigger AFCI requirements.",
+     "C|NEC 210.8(A)|GFCI locations (bathrooms, kitchens, laundry, garages, outdoors, crawlspaces, basements, etc.) — the list expands by edition.",
+     "L||Tennessee adoption of the NEC (and any amendments) varies by AHJ / state electrical program. Confirm the edition."
+    ]
+   }
+  },
+  {
+   "id": "ele.smoke",
+   "t": "Smoke & CO alarm locations (hardwired, interconnected)",
+   "tr": "Electrical",
+   "ph": "P09",
+   "d": [
+    "ele.walk"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "In each sleeping room",
+    "Outside each sleeping area",
+    "Each story incl. basement",
+    "CO alarm outside sleeping areas when fuel-burning appliance or attached garage",
+    "Interconnected"
+   ],
+   "G": {
+    "w": "Install smoke and CO alarms where required for alterations requiring a permit.",
+    "t": [
+     "C|IRC R314.3 / R314.4 / R314.2.2|Smoke alarms in each sleeping room, outside each sleeping area, and on each story; interconnected and hardwired with battery backup in new work. Alterations requiring a permit generally trigger compliance (with stated exceptions).",
+     "C|IRC R315|CO alarms required where fuel-fired appliances or an attached garage exist, outside each sleeping area and in bedrooms with fuel-burning appliances.",
+     "M||Clearances from ceiling fans, HVAC supplies and bathrooms per alarm manufacturer and NFPA 72 guidance."
+    ]
+   }
+  },
+  {
+   "id": "ele.nailplates",
+   "t": "Cable protection: nail plates & bored-hole setbacks",
+   "tr": "Electrical",
+   "ph": "P09",
+   "d": [
+    "ele.rough"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.electrical!=='none'",
+   "photo": true,
+   "G": {
+    "w": "Protect cable from drywall and trim fasteners.",
+    "t": [
+     "C|NEC 300.4(A)|Bored holes in framing at least 1-1/4 in. from the nearest edge, or protected by a steel plate at least 1/16 in. thick."
+    ]
+   }
+  },
+  {
+   "id": "ele.recessed",
+   "t": "Recessed lights: IC-rated, airtight, layout",
+   "tr": "Electrical",
+   "ph": "P09",
+   "d": [
+    "ele.walk"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.electrical!=='none' && A.recessed",
+   "G": {
+    "w": "Install recessed lights that maintain the ceiling air barrier and insulation.",
+    "t": [
+     "C|IRC N1102.4.5|Recessed luminaires in the building thermal envelope must be IC-rated, labeled for ≤2.0 cfm leakage, and sealed to the drywall with a gasket or caulk.",
+     "P||Lay out on a grid from cabinets / walls, not just room center. Check joist conflicts before cutting."
+    ]
+   }
+  },
+  {
+   "id": "ele.lv",
+   "t": "Low-voltage: data, security, doorbell, AV, Wi-Fi",
+   "tr": "Low-Voltage",
+   "ph": "P09",
+   "d": [
+    "ele.walk"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.electrical!=='none' && A.lowVoltage",
+   "q": [
+    "Structured media panel location",
+    "Cat6 home runs labeled",
+    "Low-voltage separated from power per code"
+   ]
+  },
+  {
+   "id": "ele.ext",
+   "t": "Exterior receptacles & lighting",
+   "tr": "Electrical",
+   "ph": "P09",
+   "d": [
+    "ele.walk",
+    "wrb.install"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.electrical!=='none'",
+   "G": {
+    "w": "Install outdoor receptacles and lighting with proper protection and flashing.",
+    "t": [
+     "C|NEC 210.52(E)|Outdoor receptacle at front and back of a one-family dwelling, accessible from grade.",
+     "C|NEC 406.9(B)|Wet location receptacles with extra-duty in-use covers.",
+     "P||Use flashed mounting blocks on all siding penetrations."
+    ]
+   }
+  },
+  {
+   "id": "ele.ev",
+   "t": "EV charger circuit",
+   "tr": "Electrical",
+   "ph": "P09",
+   "d": [
+    "ele.service"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.electrical!=='none' && A.evCharger"
+  },
+  {
+   "id": "ele.gen",
+   "t": "Generator interlock / transfer equipment",
+   "tr": "Electrical",
+   "ph": "P09",
+   "d": [
+    "ele.service"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.electrical!=='none' && A.generator"
+  },
+  {
+   "id": "b.heatmat",
+   "t": "Heated floor: circuit, thermostat, sensor conduit",
+   "tr": "Electrical",
+   "ph": "P09",
+   "d": [
+    "b.elec"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath",
+   "w": "B.heatedFloor && A.electrical!=='none'",
+   "G": {
+    "w": "Prepare the heated-floor circuit and sensor path.",
+    "t": [
+     "M||Circuit size, GFCI/thermostat requirements and sensor installation per mat manufacturer.",
+     "P||Run a spare sensor in conduit — replacing a failed sensor under tile is otherwise impossible."
+    ]
+   }
+  },
+  {
+   "id": "ele.bond",
+   "t": "Bond metal water / gas piping",
+   "tr": "Electrical",
+   "ph": "P09",
+   "d": [
+    "gas.pipe",
+    "plb.supply"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.electrical!=='none' && (A.gas!=='none' || A.supplyMat==='copper')"
+  },
+  {
+   "id": "ele.photo",
+   "t": "Photograph all wiring with tape references",
+   "tr": "Pinestone (GC)",
+   "ph": "P09",
+   "d": [
+    "ele.rough",
+    "ele.nailplates"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.electrical!=='none'",
+   "photo": true
+  },
+  {
+   "id": "pd.fireblock",
+   "t": "Fireblocking at plates, soffits, chases, stairs & penetrations",
+   "tr": "Framing",
+   "ph": "P10",
+   "d": [
+    "plb.test",
+    "ele.rough",
+    "hvac.ducts",
+    "gas.pipe",
+    "b.fan@*"
+   ],
+   "g": [],
+   "f": [
+    "cp.framing"
+   ],
+   "photo": true,
+   "q": [
+    "Plate penetrations (pipes, wires, flues) sealed with approved material",
+    "Soffits / drop ceilings blocked at walls",
+    "Stair stringers blocked top & bottom",
+    "Vertical chases blocked at each floor & ceiling",
+    "Concealed spaces >10 ft horizontally blocked"
+   ],
+   "G": {
+    "w": "Cut off concealed draft openings so fire cannot travel through walls, floors and chases.",
+    "t": [
+     "C|IRC R302.11|Fireblocking required in concealed spaces: vertically at ceiling and floor levels, horizontally at 10 ft intervals, at interconnections between vertical and horizontal spaces (soffits, drop ceilings, coves), at stair stringers top and bottom, and at openings around vents, pipes, ducts, cables and wires at ceiling and floor level.",
+     "C|IRC R302.11.1|Acceptable materials include 2 in. nominal lumber, two thicknesses of 1 in. lumber, 23/32 in. wood structural panel, 1/2 in. gypsum board, batts of mineral wool or glass fiber securely retained; penetrations at plates sealed with an approved material (e.g. fire-rated sealant/foam listed for fireblocking).",
+     "P||Use red/orange fireblock foam or rated sealant at every top-plate penetration and photograph each wall."
+    ],
+    "m": [
+     "Standard low-expansion foam at top plates (usually not an approved fireblock).",
+     "Missing blocking where a soffit meets a wall.",
+     "Tub and shower drain penetrations left open to the crawlspace."
+    ]
+   }
+  },
+  {
+   "id": "pd.draftstop",
+   "t": "Draftstopping in floor / ceiling assemblies",
+   "tr": "Framing",
+   "ph": "P10",
+   "d": [
+    "pd.fireblock"
+   ],
+   "g": [],
+   "f": [
+    "cp.framing"
+   ],
+   "w": "A.stories!=='1' || (A.foundation==='basement' && A.bsmtFinish)",
+   "G": {
+    "w": "Subdivide large concealed floor/ceiling spaces where draftstopping applies.",
+    "t": [
+     "C|IRC R302.12|When there is usable space both above and below the concealed space of a floor/ceiling assembly, draftstops are required so that the concealed area does not exceed 1,000 sq ft, divided into approximately equal areas. Typically relevant for open-web floor trusses or suspended/furred ceilings; confirm applicability.",
+     "C|IRC R302.12.1|Draftstopping materials: not less than 1/2 in. gypsum board, 3/8 in. wood structural panels, or equivalent, adequately supported."
+    ]
+   }
+  },
+  {
+   "id": "pd.garage",
+   "t": "Garage / dwelling separation & door",
+   "tr": "Drywall",
+   "ph": "P10",
+   "d": [
+    "pd.fireblock"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.garage==='attached'",
+   "G": {
+    "w": "Provide the required separation between the attached garage and the house.",
+    "t": [
+     "C|IRC R302.6 (Table)|Minimum 1/2 in. gypsum board on the garage side; 5/8 in. Type X on garage ceilings under habitable rooms; supporting structure protected.",
+     "C|IRC R302.5.1|Door between garage and residence: solid wood or solid/honeycomb-core steel not less than 1-3/8 in., or 20-minute fire-rated. Self-closing requirements may be amended locally.",
+     "C|IRC R302.5.2|Ducts penetrating the separation: minimum 26-gauge steel (or other approved) with no openings into the garage."
+    ]
+   }
+  },
+  {
+   "id": "pd.backing",
+   "t": "Backing & blocking (cabinets, TV, rails, fans, hardware)",
+   "tr": "Framing",
+   "ph": "P10",
+   "d": [
+    "ele.rough",
+    "plb.supply",
+    "frm.straighten"
+   ],
+   "g": [],
+   "f": [],
+   "photo": true,
+   "q": [
+    "Grab-bar / future grab-bar blocking at toilets and showers",
+    "Towel bars, TP holders, robe hooks",
+    "Shower door & curtain rod",
+    "Wall-hung vanity / floating shelves",
+    "TV mounts",
+    "Handrail brackets",
+    "Ceiling fans (fan-rated boxes)",
+    "Door stops / heavy mirrors"
+   ],
+   "G": {
+    "w": "Install solid wood backing for everything that will hang on a wall before drywall.",
+    "t": [
+     "P||Pinestone standard: 2x blocking at 33–36 in. and 60–66 in. in every shower and beside every toilet for current or future grab bars.",
+     "C|NEC 314.27(C)|Ceiling fan outlet boxes must be listed for fan support.",
+     "P||Photograph each blocking location with tape measurements from floor and corner — it is invisible after drywall."
+    ],
+    "m": [
+     "Relying on toggle bolts for towel bars and shower doors.",
+     "No backing for wall-hung vanity or upper cabinets on metal/old framing."
+    ]
+   }
+  },
+  {
+   "id": "b.blocking",
+   "t": "Bath blocking verification (glass, grab bars, niche, accessories)",
+   "tr": "Framing",
+   "ph": "P10",
+   "d": [
+    "pd.backing",
+    "b.frame"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath",
+   "photo": true
+  },
+  {
+   "id": "pd.kitblock",
+   "t": "Kitchen backing (upper cabinets, hood, island anchoring)",
+   "tr": "Framing",
+   "ph": "P10",
+   "d": [
+    "pd.backing"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.kitchen!=='none'",
+   "photo": true
+  },
+  {
+   "id": "pd.airseal",
+   "t": "Air sealing: plates, penetrations, rims, windows, tubs",
+   "tr": "Insulation",
+   "ph": "P10",
+   "d": [
+    "pd.fireblock",
+    "ele.rough",
+    "plb.test",
+    "dryin.check",
+    "wrb.install"
+   ],
+   "g": [],
+   "f": [
+    "cp.insul"
+   ],
+   "photo": true,
+   "q": [
+    "Top/bottom plates sealed to drywall plane",
+    "Wire & pipe penetrations sealed",
+    "Rim joists sealed",
+    "Window/door shims gaps foamed (low expansion)",
+    "Air barrier behind tubs/showers on exterior walls",
+    "Attic hatch gasketed"
+   ],
+   "G": {
+    "w": "Create a continuous air barrier before insulation and drywall.",
+    "t": [
+     "C|IRC N1102.4.1.1 (Table)|Air barrier and insulation installation criteria: top plates, penetrations, rim joists, windows/doors, shower/tub on exterior walls, recessed lights, etc.",
+     "L||Whether full energy-code air sealing/testing applies to an alteration depends on scope and AHJ. Pinestone seals regardless."
+    ]
+   }
+  },
+  {
+   "id": "pd.insulwalls",
+   "t": "Wall insulation",
+   "tr": "Insulation",
+   "ph": "P10",
+   "d": [
+    "pd.airseal"
+   ],
+   "g": [
+    "cp.rough-plb",
+    "cp.rough-gas",
+    "cp.rough-mech",
+    "cp.rough-elec",
+    "cp.framing"
+   ],
+   "f": [
+    "cp.insul"
+   ],
+   "w": "A.insulWalls!=='none'",
+   "photo": true,
+   "q": [
+    "Full-depth, no gaps / voids / compression (Grade I)",
+    "Split around wiring and pipes, not compressed behind",
+    "Behind tubs, boxes and in corners/headers",
+    "R-value labels / certificate posted"
+   ],
+   "G": {
+    "w": "Install wall insulation to full depth and in contact with the air barrier.",
+    "t": [
+     "C|IRC N1102.1.2 (Table)|Climate Zone 4 (most of Middle TN) wood-frame wall R-value: R-20 or R-13+5 continuous (2018). Climate zone and edition must be confirmed.",
+     "C|IRC N1102.4.1.1|Insulation fills cavities completely, in contact with the air barrier.",
+     "P||Pinestone QC: inspect every bay before drywall; reject compressed batts behind boxes."
+    ]
+   }
+  },
+  {
+   "id": "pd.sprayfoam",
+   "t": "Spray foam (walls / roofline) & ignition/thermal barrier",
+   "tr": "Insulation",
+   "ph": "P10",
+   "d": [
+    "pd.airseal"
+   ],
+   "g": [
+    "cp.rough-plb",
+    "cp.rough-gas",
+    "cp.rough-mech",
+    "cp.rough-elec",
+    "cp.framing"
+   ],
+   "f": [
+    "cp.insul"
+   ],
+   "w": "['open-cell','closed-cell'].includes(A.insulWalls) || A.insulAttic==='spray-roofline'",
+   "photo": true,
+   "G": {
+    "w": "Install spray foam at specified thickness with required protection.",
+    "t": [
+     "C|IRC R316.4|Foam plastic separated from the interior by an approved thermal barrier (e.g. 1/2 in. gypsum board) unless listed otherwise.",
+     "C|IRC R316.5.3|Attics / crawlspaces entered only for service: ignition barrier or listed foam for exposed use.",
+     "C|IRC R806.5|Unvented attic assemblies: insulation requirements, air-impermeable insulation at the deck (or alternatives).",
+     "M||Thickness per pass, temperature, curing, and re-occupancy times per foam manufacturer."
+    ]
+   }
+  },
+  {
+   "id": "pd.measure",
+   "t": "Record dimensions of concealed items (valves, blocking, boxes)",
+   "tr": "Pinestone (GC)",
+   "ph": "P10",
+   "d": [
+    "pd.backing",
+    "b.valve@*"
+   ],
+   "g": [],
+   "f": []
+  },
+  {
+   "id": "pd.photo",
+   "t": "Pre-drywall photo & video record of every wall & ceiling",
+   "tr": "Pinestone (GC)",
+   "ph": "P10",
+   "d": [
+    "pd.fireblock",
+    "pd.airseal",
+    "pd.backing",
+    "pd.insulwalls",
+    "pd.sprayfoam"
+   ],
+   "g": [],
+   "f": [
+    "cp.predry"
+   ],
+   "photo": true,
+   "q": [
+    "Each wall photographed with room label & tape measure",
+    "Ceilings photographed",
+    "Video walkthrough saved",
+    "Photos attached to tasks / backup file"
+   ],
+   "G": {
+    "w": "Create the permanent record of everything inside the walls.",
+    "t": [
+     "P||Photograph each wall straight-on with a tape across it at 48 in. and a room/wall label (e.g. \"Kitchen — North\"). Add the key shots to the related tasks in this app."
+    ]
+   }
+  },
+  {
+   "id": "pd.qc",
+   "t": "Pinestone pre-drywall walkthrough",
+   "tr": "Pinestone (GC)",
+   "ph": "P10",
+   "d": [
+    "frm.qc",
+    "plb.test",
+    "plb.nailplates",
+    "ele.nailplates",
+    "hvac.seal",
+    "pd.fireblock",
+    "pd.draftstop",
+    "pd.backing",
+    "b.blocking@*",
+    "pd.kitblock",
+    "pd.airseal",
+    "plb.boring",
+    "b.valve@*",
+    "hvac.terminations",
+    "dryin.check",
+    "win.verify",
+    "frm.loadpath",
+    "frm.engobs",
+    "b.tub@*",
+    "plb.wh",
+    "plb.hosebib",
+    "gas.test",
+    "hvac.condensate",
+    "hvac.lineset",
+    "hvac.freshair",
+    "ele.kitchen",
+    "b.elec@*",
+    "ele.laundry",
+    "ele.afci",
+    "ele.smoke",
+    "ele.recessed",
+    "ele.lv",
+    "ele.ext",
+    "b.heatmat@*",
+    "ele.bond",
+    "ele.photo",
+    "pd.measure",
+    "pd.garage"
+   ],
+   "g": [],
+   "f": [
+    "cp.predry"
+   ],
+   "q": [
+    "All rough inspections passed (see Inspections)",
+    "Nail plates everywhere within 1-1/4 in.",
+    "Fireblocking & penetrations sealed",
+    "Blocking for every accessory",
+    "Valve depths verified against tile wall thickness",
+    "Box depths match finish",
+    "Ducts sealed, boots secured",
+    "Bath fans terminate outdoors",
+    "Smoke/CO locations roughed",
+    "Insulation complete, no gaps",
+    "Photo record complete"
+   ],
+   "G": {
+    "w": "Final internal check before anything is concealed.",
+    "t": [
+     "P||Walk with the pre-drywall PDF checklist. Every \"no\" becomes a blocked task with a note. Sign off the Pinestone pre-drywall checkpoint only when every item is complete."
+    ]
+   }
+  },
+  {
+   "id": "dw.deliver",
+   "t": "Drywall delivery: types & quantities verified",
+   "tr": "Drywall",
+   "ph": "P11",
+   "d": [
+    "pre.order"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Moisture/mold-resistant board for baths & laundry",
+    "Type X where required (garage)",
+    "Board stocked so it does not overload framing"
+   ]
+  },
+  {
+   "id": "dw.hang",
+   "t": "Hang drywall (ceilings first)",
+   "tr": "Drywall",
+   "ph": "P11",
+   "d": [
+    "dw.deliver",
+    "pd.qc",
+    "pd.photo",
+    "pd.insulwalls",
+    "pd.sprayfoam",
+    "pd.garage"
+   ],
+   "g": [
+    "cp.rough-plb",
+    "cp.rough-gas",
+    "cp.rough-mech",
+    "cp.rough-elec",
+    "cp.framing",
+    "cp.insul",
+    "cp.predry"
+   ],
+   "f": [],
+   "q": [
+    "Fastener spacing per schedule",
+    "No butt joints at window/door corners",
+    "Board 1/2 in. off floor",
+    "Boxes not buried / cut oversize"
+   ],
+   "G": {
+    "w": "Hang drywall only after all rough inspections and the Pinestone pre-drywall sign-off.",
+    "t": [
+     "C|IRC R702.3.5 (Table)|Gypsum board fastener type and spacing based on framing spacing and orientation.",
+     "C|IRC R702.4.2|Paper-faced gypsum board is not permitted as a tile backer in tub/shower areas — use cement, fiber-cement, glass-mat gypsum, or a listed system board.",
+     "P||Hang ceilings first, walls tight to the ceiling; use mold-resistant board in baths outside the wet zone."
+    ]
+   }
+  },
+  {
+   "id": "dw.attic",
+   "t": "Attic insulation (blown / batts) with baffles & markers",
+   "tr": "Insulation",
+   "ph": "P11",
+   "d": [
+    "dw.hang",
+    "roof.vent"
+   ],
+   "g": [],
+   "f": [],
+   "w": "['blown','batts'].includes(A.insulAttic)",
+   "q": [
+    "Baffles at every vented rafter bay",
+    "Depth markers installed",
+    "Hatch insulated and weatherstripped",
+    "Certificate posted"
+   ],
+   "G": {
+    "w": "Insulate the attic floor after ceilings are hung.",
+    "t": [
+     "C|IRC N1102.1.2 (Table)|Climate Zone 4 ceiling insulation R-49 (2018). Confirm climate zone and edition.",
+     "C|IRC R806.3|Baffles to maintain 1 in. airspace at vents.",
+     "C|IRC N1101.10.1|Blown insulation depth markers (at least one per 300 sq ft) facing the attic access, and insulation certificate."
+    ]
+   }
+  },
+  {
+   "id": "dw.finish",
+   "t": "Tape, mud & sand to specified finish level",
+   "tr": "Drywall",
+   "ph": "P11",
+   "d": [
+    "dw.hang"
+   ],
+   "g": [],
+   "f": [],
+   "G": {
+    "w": "Finish joints to the specified level.",
+    "t": [
+     "S|GA-214|Level 4 for most flat-painted walls; Level 5 (skim coat) where critical lighting or gloss paint is used.",
+     "P||Inspect under raking light before primer."
+    ]
+   }
+  },
+  {
+   "id": "dw.qc",
+   "t": "Drywall QC with raking light",
+   "tr": "Pinestone (GC)",
+   "ph": "P11",
+   "d": [
+    "dw.finish"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "No ridging / crowned joints",
+    "Corners straight",
+    "Cabinet & tile walls flat",
+    "Outlet cut-outs tight"
+   ]
+  },
+  {
+   "id": "b.backer",
+   "t": "Tile backer / board system install",
+   "tr": "Tile",
+   "ph": "P11",
+   "d": [
+    "dw.hang",
+    "b.valve",
+    "b.tub",
+    "b.drain",
+    "b.blocking"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath",
+   "w": "['tile-tub','tile-shower-curb','tile-curbless'].includes(B.shower)",
+   "q": [
+    "Approved backer in wet area (no paper-faced gypsum)",
+    "Fastener type & spacing per board manufacturer",
+    "Flat & plumb",
+    "Backer overlaps tub flange per manufacturer"
+   ],
+   "G": {
+    "w": "Install wet-area substrate per the waterproofing system.",
+    "t": [
+     "C|IRC R702.4.2|Backer for wall tile in tub/shower areas: fiber-cement, fiber-mat reinforced cementitious backer, glass-mat gypsum, or fiber-reinforced gypsum backer (per the referenced standards).",
+     "M||Fastener and seam treatment per the board / system manufacturer."
+    ]
+   }
+  },
+  {
+   "id": "b.pan",
+   "t": "Shower pan: pre-slope & liner / membrane",
+   "tr": "Tile",
+   "ph": "P11",
+   "d": [
+    "b.backer",
+    "b.drain"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath",
+   "w": "['tile-tub','tile-shower-curb','tile-curbless'].includes(B.shower) && B.shower!=='tile-tub'",
+   "photo": true,
+   "q": [
+    "Pre-slope 1/4 in. per foot to drain",
+    "Liner / membrane up walls & over curb per system",
+    "No fasteners through liner below curb height",
+    "Curbless transition per system"
+   ],
+   "G": {
+    "w": "Build the shower floor so water drains positively to the drain and the membrane is continuous.",
+    "t": [
+     "C|IRC P2709|Shower receptor / liner requirements: slope toward the drain (commonly 1/4 in. per foot), liner turned up on all sides above the threshold, and no penetrations of the liner below the threshold except the drain (check exact heights in your edition).",
+     "M||Bonded systems (sheet/foam/liquid) use the manufacturer pan details; traditional liners need a pre-slope under the liner and weep holes kept open."
+    ]
+   }
+  },
+  {
+   "id": "b.membrane",
+   "t": "Waterproof walls, niche, bench, penetrations",
+   "tr": "Tile",
+   "ph": "P11",
+   "d": [
+    "b.backer",
+    "b.pan"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath",
+   "w": "['tile-tub','tile-shower-curb','tile-curbless'].includes(B.shower)",
+   "photo": true,
+   "q": [
+    "Seams & corners banded",
+    "Valve & shower-head penetrations sealed with gaskets/collars",
+    "Niche & bench fully wrapped",
+    "Liquid membrane thickness checked (wet-film gauge)",
+    "Membrane extends above shower head / to ceiling per Pinestone standard"
+   ],
+   "G": {
+    "w": "Waterproof the full wet area to the system manufacturer requirements.",
+    "t": [
+     "M||Sheet: overlap and thinset type per manufacturer. Liquid: number of coats, mil thickness, cure time per manufacturer (use a wet-film gauge).",
+     "S|ANSI A118.10|Load-bearing, bonded waterproof membranes for thin-set tile.",
+     "P||Pinestone standard: waterproof walls to at least 6 in. above the shower head; full height in steam or curbless showers."
+    ],
+    "m": [
+     "Mixing components from different waterproofing manufacturers.",
+     "Skipping the valve/shower-arm seals."
+    ]
+   }
+  },
+  {
+   "id": "b.flood",
+   "t": "Flood test 24 hrs & photo record",
+   "tr": "Tile",
+   "ph": "P11",
+   "d": [
+    "b.membrane"
+   ],
+   "g": [],
+   "f": [
+    "cp.flood"
+   ],
+   "each": "bath",
+   "w": "['tile-tub','tile-shower-curb','tile-curbless'].includes(B.shower)",
+   "photo": true,
+   "q": [
+    "Drain plugged, water to just below curb / threshold",
+    "Water line marked and photographed at start & end",
+    "No drop / no leaks below (check from crawl / ceiling below)"
+   ],
+   "G": {
+    "w": "Prove the shower floor waterproofing before tile.",
+    "t": [
+     "S|ANSI A118.10 / TCNA|Flood test of membranes typically 24 hours minimum after cure.",
+     "M||Follow the membrane manufacturer flood-test instructions and cure times.",
+     "L||Some AHJs inspect shower pans (traditional liners). Confirm."
+    ]
+   }
+  },
+  {
+   "id": "b.floorprep",
+   "t": "Bath floor tile substrate & uncoupling membrane",
+   "tr": "Tile",
+   "ph": "P11",
+   "d": [
+    "dw.hang"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath",
+   "w": "B.floorTile",
+   "G": {
+    "w": "Prepare a flat, stiff floor for tile.",
+    "t": [
+     "S|TCNA Handbook|Deflection L/360 for ceramic/porcelain and L/720 for natural stone; flatness for large-format tile.",
+     "M||Uncoupling membrane and heated mat sequence per manufacturer."
+    ]
+   }
+  },
+  {
+   "id": "b.heatfloor",
+   "t": "Install heated floor mat & ohm tests",
+   "tr": "Tile",
+   "ph": "P11",
+   "d": [
+    "b.floorprep",
+    "b.heatmat"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath",
+   "w": "B.heatedFloor",
+   "photo": true,
+   "q": [
+    "Ohm & insulation-resistance test before, during and after tile (recorded)",
+    "Sensor between wires per manufacturer",
+    "Wire not under toilet/vanity footprint"
+   ],
+   "G": {
+    "w": "Install the heating mat and record tests that protect the warranty.",
+    "t": [
+     "M||Record resistance values from the mat label and test results at each stage on the warranty card — required by most manufacturers."
+    ]
+   }
+  },
+  {
+   "id": "ext.siding",
+   "t": "Install siding per manufacturer",
+   "tr": "Siding / Exterior",
+   "ph": "P12",
+   "d": [
+    "wrb.install",
+    "win.install",
+    "door.ext",
+    "roof.flash"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.siding.startsWith('full')",
+   "q": [
+    "Clearance to grade, roof, decks per manufacturer",
+    "Butt joints flashed (fiber cement)",
+    "Penetrations on mounting blocks",
+    "Fastening per manufacturer (blind/face, nail type)"
+   ],
+   "G": {
+    "w": "Install cladding with manufacturer clearances and joint/penetration details.",
+    "t": [
+     "M||Fiber cement: clearances (commonly 6 in. to grade, 1–2 in. to roofs/decks), joint flashing, fastener type and paint timing per manufacturer.",
+     "M||Vinyl: nail in center of slots, not tight; allow expansion gaps.",
+     "C|IRC R703.3 / R703.10–R703.11|Siding attachment and installation per IRC tables and manufacturer."
+    ]
+   }
+  },
+  {
+   "id": "ext.sidingrepair",
+   "t": "Siding / masonry repairs",
+   "tr": "Siding / Exterior",
+   "ph": "P12",
+   "d": [
+    "demo.assess"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.siding==='repair' || A.siding==='masonry-repair'"
+  },
+  {
+   "id": "ext.trim",
+   "t": "Exterior trim, soffit & fascia",
+   "tr": "Siding / Exterior",
+   "ph": "P12",
+   "d": [
+    "ext.siding",
+    "roof.cover"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.siding!=='none' || A.roof.startsWith('reroof')"
+  },
+  {
+   "id": "ext.penetrations",
+   "t": "Flash & seal all exterior penetrations",
+   "tr": "Siding / Exterior",
+   "ph": "P12",
+   "d": [
+    "ext.siding",
+    "ele.ext",
+    "hvac.terminations",
+    "plb.hosebib"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Every penetration on a flashed block or boot",
+    "Sealant compatible with cladding"
+   ]
+  },
+  {
+   "id": "ext.paint",
+   "t": "Exterior paint & caulk",
+   "tr": "Painting",
+   "ph": "P12",
+   "d": [
+    "ext.siding",
+    "ext.trim",
+    "ext.sidingrepair",
+    "site.rrp"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.extPaint"
+  },
+  {
+   "id": "ext.gutters",
+   "t": "Gutters & downspouts (discharge away from foundation)",
+   "tr": "Roofing",
+   "ph": "P12",
+   "d": [
+    "roof.cover",
+    "ext.trim",
+    "roof.repair"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.gutters",
+   "G": {
+    "w": "Collect roof water and discharge it away from the foundation.",
+    "t": [
+     "P||Pinestone standard: downspouts discharge at least 4–6 ft from the foundation (extensions or underground to daylight).",
+     "L|IRC R801.3|Roof drainage to a storm sewer or at least 5 ft from foundations is required only in expansive or collapsible soil areas — determined locally."
+    ]
+   }
+  },
+  {
+   "id": "ext.grade",
+   "t": "Grade soil away from foundation",
+   "tr": "Excavation / Site",
+   "ph": "P12",
+   "d": [
+    "ext.siding",
+    "ext.gutters"
+   ],
+   "g": [
+    "cp.811"
+   ],
+   "f": [],
+   "w": "A.grading || (A.foundation==='crawlspace' && ['exterior-grading','both'].includes(A.crawlDrain))",
+   "G": {
+    "w": "Slope the finished grade away from the house.",
+    "t": [
+     "C|IRC R401.3|Finish grade falls a minimum of 6 in. within the first 10 ft (or swales/drains where lot lines prohibit).",
+     "P||Keep soil and mulch below siding clearance and weep screeds."
+    ]
+   }
+  },
+  {
+   "id": "ext.porchfoot",
+   "t": "Deck / porch footings (dig, inspect, pour)",
+   "tr": "Concrete",
+   "ph": "P12",
+   "d": [
+    "pre.811"
+   ],
+   "g": [
+    "cp.811",
+    "cp.permit"
+   ],
+   "f": [
+    "cp.deckfooting"
+   ],
+   "w": "A.porch==='new-deck' || A.porch==='new-porch'",
+   "photo": true,
+   "G": {
+    "w": "Excavate and pour deck/porch footings after inspection.",
+    "t": [
+     "C|IRC R507.3|Deck footings sized per table, bottom below frost depth set by the AHJ.",
+     "P||Do not pour until the footing inspection is recorded as passed (pour is a separate step after the checkpoint)."
+    ]
+   }
+  },
+  {
+   "id": "ext.porch",
+   "t": "Porch / deck work (ledger flashing, connections, guards)",
+   "tr": "Framing",
+   "ph": "P12",
+   "d": [
+    "ext.porchfoot",
+    "wrb.install"
+   ],
+   "g": [
+    "cp.deckfooting"
+   ],
+   "f": [],
+   "w": "A.porch!=='none'",
+   "q": [
+    "Ledger flashed and attached per R507.9",
+    "Lateral connections as required",
+    "Guards 36 in. min; 4 in. sphere rule",
+    "Stairs: rise/run, handrail, lighting"
+   ],
+   "G": {
+    "w": "Build or repair the porch/deck with a proper ledger, connections and guards.",
+    "t": [
+     "C|IRC R507|Deck footings, posts, beams, joists, ledger attachment (R507.9) and flashing.",
+     "C|IRC R312.1|Guards required where walking surface is more than 30 in. above grade; 36 in. minimum height; openings reject a 4 in. sphere."
+    ]
+   }
+  },
+  {
+   "id": "ext.flatwork",
+   "t": "Driveway / walkways / flatwork",
+   "tr": "Concrete",
+   "ph": "P12",
+   "d": [
+    "ext.grade",
+    "pre.811"
+   ],
+   "g": [
+    "cp.811"
+   ],
+   "f": [],
+   "w": "A.flatwork"
+  },
+  {
+   "id": "ext.hvacpad",
+   "t": "Condenser pad / stand, disconnect & whip",
+   "tr": "HVAC",
+   "ph": "P12",
+   "d": [
+    "hvac.lineset",
+    "ele.rough"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.hvac!=='none'"
+  },
+  {
+   "id": "ext.address",
+   "t": "House numbers visible from street",
+   "tr": "Pinestone (GC)",
+   "ph": "P12",
+   "d": [
+    "ext.paint",
+    "ext.siding"
+   ],
+   "g": [],
+   "f": [],
+   "G": {
+    "w": "Install address numbers.",
+    "t": [
+     "C|IRC R319.1|Address numbers visible from the street, contrasting with background, minimum 4 in. high."
+    ]
+   }
+  },
+  {
+   "id": "ext.fence",
+   "t": "Fencing",
+   "tr": "Landscaping",
+   "ph": "P12",
+   "d": [
+    "pre.811"
+   ],
+   "g": [
+    "cp.811"
+   ],
+   "f": [],
+   "w": "A.fence"
+  },
+  {
+   "id": "ext.landscape",
+   "t": "Landscaping & final grading",
+   "tr": "Landscaping",
+   "ph": "P12",
+   "d": [
+    "ext.grade",
+    "ext.flatwork"
+   ],
+   "g": [
+    "cp.811"
+   ],
+   "f": [],
+   "w": "A.landscaping"
+  },
+  {
+   "id": "fin.prime",
+   "t": "Prime drywall",
+   "tr": "Painting",
+   "ph": "P13",
+   "d": [
+    "dw.qc"
+   ],
+   "g": [],
+   "f": []
+  },
+  {
+   "id": "fin.cabinets",
+   "t": "Install kitchen cabinets",
+   "tr": "Cabinets",
+   "ph": "P13",
+   "d": [
+    "fin.prime",
+    "pd.kitblock",
+    "dw.qc"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.kitchen!=='none'",
+   "q": [
+    "Uppers fastened into backing / studs with cabinet screws",
+    "Base level to highest floor point",
+    "Fillers & scribes",
+    "Appliance openings per spec sheets",
+    "Dishwasher anchor strip / side mount provision"
+   ],
+   "G": {
+    "w": "Install cabinets level, plumb and secured to structure.",
+    "t": [
+     "M||Fasten per cabinet manufacturer: cabinet screws (not drywall screws) through hanging rails into framing.",
+     "P||Set a level line from the high point of the floor. Check appliance openings against the actual appliance spec sheets before counters are templated."
+    ]
+   }
+  },
+  {
+   "id": "b.vanity",
+   "t": "Install vanity",
+   "tr": "Cabinets",
+   "ph": "P13",
+   "d": [
+    "fin.prime",
+    "b.blocking"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath"
+  },
+  {
+   "id": "fin.template",
+   "t": "Countertop template",
+   "tr": "Countertops",
+   "ph": "P13",
+   "d": [
+    "fin.cabinets",
+    "b.vanity@*"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.kitchen!=='none'",
+   "q": [
+    "Sinks, faucets & cooktop on site for template",
+    "Overhang supports planned"
+   ]
+  },
+  {
+   "id": "fin.counters",
+   "t": "Countertop install",
+   "tr": "Countertops",
+   "ph": "P13",
+   "d": [
+    "fin.template"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.kitchen!=='none'",
+   "G": {
+    "w": "Install countertops with proper support.",
+    "t": [
+     "M||Overhang support limits (brackets / corbels / steel) per fabricator and material manufacturer.",
+     "P||Verify sink reveal, faucet holes and seam location before fabricator leaves."
+    ]
+   }
+  },
+  {
+   "id": "fin.backsplash",
+   "t": "Backsplash tile",
+   "tr": "Tile",
+   "ph": "P13",
+   "d": [
+    "fin.counters",
+    "ele.rough"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.kitchen!=='none' && A.backsplash",
+   "q": [
+    "Receptacles extended to finished face",
+    "Movement gap at countertop, sealant not grout"
+   ]
+  },
+  {
+   "id": "b.tile",
+   "t": "Bath wall & floor tile",
+   "tr": "Tile",
+   "ph": "P13",
+   "d": [
+    "b.membrane",
+    "b.floorprep",
+    "b.heatfloor",
+    "b.backer"
+   ],
+   "g": [
+    "cp.flood"
+   ],
+   "f": [],
+   "each": "bath",
+   "w": "['tile-tub','tile-shower-curb','tile-curbless'].includes(B.shower) || B.floorTile",
+   "photo": true,
+   "q": [
+    "Layout approved (centerlines, cut sizes, niche lines)",
+    "Mortar coverage 95% in wet areas (pull a tile)",
+    "Movement joints at changes of plane & perimeter",
+    "Lippage within tolerance",
+    "Mortar type matches membrane & tile"
+   ],
+   "G": {
+    "w": "Set tile with full coverage and movement accommodation.",
+    "t": [
+     "S|ANSI A108.5|Average mortar coverage: 80% minimum in dry interior areas; 95% in wet areas and exterior.",
+     "S|TCNA EJ171|Movement joints at changes of plane, perimeters and at intervals; filled with sealant, not grout.",
+     "M||Thinset type (modified/unmodified) per membrane manufacturer (e.g. some sheet membranes require specific mortar)."
+    ],
+    "m": [
+     "Grout in inside corners instead of sealant.",
+     "Not back-buttering large-format tile."
+    ]
+   }
+  },
+  {
+   "id": "b.grout",
+   "t": "Grout, sealant at changes of plane, sealer",
+   "tr": "Tile",
+   "ph": "P13",
+   "d": [
+    "b.tile"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath",
+   "w": "['tile-tub','tile-shower-curb','tile-curbless'].includes(B.shower) || B.floorTile"
+  },
+  {
+   "id": "fin.floorprep",
+   "t": "Flooring prep: acclimation, moisture & flatness tests",
+   "tr": "Flooring",
+   "ph": "P13",
+   "d": [
+    "dw.qc",
+    "crawl.final"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.flooring.length>0",
+   "photo": true,
+   "q": [
+    "Moisture of subfloor/slab recorded",
+    "Material acclimated per manufacturer",
+    "Flatness within manufacturer tolerance",
+    "Crawlspace / HVAC operating (interior conditions)"
+   ],
+   "G": {
+    "w": "Verify the substrate before flooring — most flooring failures are moisture or flatness.",
+    "t": [
+     "M||Moisture limits (wood MC difference; concrete RH or MVER) and flatness tolerance come from the flooring manufacturer and are warranty conditions.",
+     "S|NWFA|Wood flooring jobsite conditions and acclimation guidelines.",
+     "P||Record readings in this task note with photos of the meter."
+    ]
+   }
+  },
+  {
+   "id": "fin.hardwood",
+   "t": "Install new hardwood",
+   "tr": "Flooring",
+   "ph": "P13",
+   "d": [
+    "fin.floorprep",
+    "fin.prime"
+   ],
+   "g": [],
+   "f": [],
+   "w": "has(A.flooring,'hardwood-new')"
+  },
+  {
+   "id": "fin.lvp",
+   "t": "Install LVP",
+   "tr": "Flooring",
+   "ph": "P13",
+   "d": [
+    "fin.floorprep",
+    "fin.cabinets"
+   ],
+   "g": [],
+   "f": [],
+   "w": "has(A.flooring,'lvp')",
+   "G": {
+    "w": "Install luxury vinyl per manufacturer.",
+    "t": [
+     "M||Expansion gaps, maximum run lengths, transitions and whether cabinets may sit on floating floors per manufacturer."
+    ]
+   }
+  },
+  {
+   "id": "fin.floortile",
+   "t": "Install floor tile (non-bath)",
+   "tr": "Tile",
+   "ph": "P13",
+   "d": [
+    "fin.floorprep"
+   ],
+   "g": [],
+   "f": [],
+   "w": "has(A.flooring,'tile')"
+  },
+  {
+   "id": "fin.intdoors",
+   "t": "Hang interior doors",
+   "tr": "Finish Carpentry",
+   "ph": "P13",
+   "d": [
+    "fin.prime",
+    "fin.hardwood",
+    "fin.lvp",
+    "fin.floortile"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.interiorDoors!=='none'",
+   "q": [
+    "Reveals even",
+    "Undercut for return air / flooring",
+    "Latch without force"
+   ]
+  },
+  {
+   "id": "fin.trim",
+   "t": "Trim: base, casing, crown",
+   "tr": "Finish Carpentry",
+   "ph": "P13",
+   "d": [
+    "fin.intdoors",
+    "fin.cabinets",
+    "fin.lvp",
+    "fin.hardwood"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.trim"
+  },
+  {
+   "id": "fin.stairs",
+   "t": "Stair finish: treads, handrails, guards",
+   "tr": "Finish Carpentry",
+   "ph": "P13",
+   "d": [
+    "fin.prime"
+   ],
+   "g": [],
+   "f": [],
+   "w": "has(A.structural,'stair-modify') || A.stories!=='1'",
+   "G": {
+    "w": "Finish stairs with compliant handrails and guards.",
+    "t": [
+     "C|IRC R311.7.8|Handrail on at least one side of stairs with 4+ risers, 34–38 in. above nosings, continuous, with graspable profile (R311.7.8.5).",
+     "C|IRC R312.1|Guards at open sides more than 30 in. above floor/grade; 36 in. min height; 4 in. sphere (4-3/8 in. at stair sides)."
+    ]
+   }
+  },
+  {
+   "id": "fin.closets",
+   "t": "Closet shelving / systems",
+   "tr": "Finish Carpentry",
+   "ph": "P13",
+   "d": [
+    "fin.paint"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.closets"
+  },
+  {
+   "id": "fin.paint",
+   "t": "Interior paint (caulk, fill, finish coats)",
+   "tr": "Painting",
+   "ph": "P13",
+   "d": [
+    "fin.trim",
+    "fin.prime"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.paintInt"
+  },
+  {
+   "id": "fin.refinish",
+   "t": "Refinish hardwood floors",
+   "tr": "Flooring",
+   "ph": "P13",
+   "d": [
+    "fin.paint",
+    "fin.trim"
+   ],
+   "g": [],
+   "f": [],
+   "w": "has(A.flooring,'hardwood-refinish') || has(A.flooring,'hardwood-new')",
+   "G": {
+    "w": "Sand and finish hardwood late in the job to avoid damage.",
+    "t": [
+     "M||Finish product cure time before traffic, rugs and furniture per manufacturer."
+    ]
+   }
+  },
+  {
+   "id": "b.glass",
+   "t": "Shower glass enclosure",
+   "tr": "Glass",
+   "ph": "P13",
+   "d": [
+    "b.grout"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath",
+   "w": "B.glass && B.shower!=='none'",
+   "G": {
+    "w": "Install the enclosure into solid backing with tempered/labeled glass.",
+    "t": [
+     "C|IRC R308.4.5|Glazing in enclosures/walls facing tubs and showers is a hazardous location (safety glazing) where the bottom edge is less than 60 in. above the standing surface."
+    ]
+   }
+  },
+  {
+   "id": "b.accessories",
+   "t": "Bath mirrors & accessories",
+   "tr": "Finish Carpentry",
+   "ph": "P13",
+   "d": [
+    "fin.paint",
+    "b.grout"
+   ],
+   "g": [],
+   "f": [],
+   "each": "bath"
+  },
+  {
+   "id": "fin.plbtrim",
+   "t": "Plumbing trim-out (fixtures, valves, toilets)",
+   "tr": "Plumbing",
+   "ph": "P13",
+   "d": [
+    "fin.counters",
+    "b.grout@*",
+    "b.vanity@*",
+    "fin.paint"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.plumbing!=='none'",
+   "q": [
+    "Toilets set on finished floor, flange height right",
+    "Anti-scald limit stops set",
+    "Escutcheons tight to tile",
+    "No leaks after 24 hrs"
+   ]
+  },
+  {
+   "id": "fin.eletrim",
+   "t": "Electrical trim-out (devices, fixtures, panel directory)",
+   "tr": "Electrical",
+   "ph": "P13",
+   "d": [
+    "fin.paint",
+    "fin.backsplash",
+    "fin.counters"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.electrical!=='none'",
+   "q": [
+    "Tamper-resistant receptacles",
+    "Covers straight & tight",
+    "Panel directory complete and specific",
+    "Fixtures per selections"
+   ],
+   "G": {
+    "w": "Install devices, fixtures and a complete panel directory.",
+    "t": [
+     "C|NEC 406.12|Tamper-resistant receptacles in dwelling units.",
+     "C|NEC 408.4|Every circuit legibly identified as to its specific purpose on the panel directory."
+    ]
+   }
+  },
+  {
+   "id": "fin.hvactrim",
+   "t": "HVAC trim (grilles, registers, thermostat)",
+   "tr": "HVAC",
+   "ph": "P13",
+   "d": [
+    "fin.paint"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.hvac!=='none'"
+  },
+  {
+   "id": "fin.appliances",
+   "t": "Appliance installation",
+   "tr": "Pinestone (GC)",
+   "ph": "P13",
+   "d": [
+    "fin.counters",
+    "fin.plbtrim",
+    "fin.eletrim"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.kitchen!=='none'",
+   "q": [
+    "Range anti-tip bracket installed",
+    "Dishwasher high loop / air gap per local rule",
+    "Gas connector & shutoff accessible",
+    "Refrigerator water line tested"
+   ],
+   "G": {
+    "w": "Install appliances per the manufacturer instructions.",
+    "t": [
+     "M||Anti-tip devices for ranges are a manufacturer installation requirement.",
+     "L||Dishwasher air gap vs. high loop acceptance varies by AHJ."
+    ]
+   }
+  },
+  {
+   "id": "fin.fireplace",
+   "t": "Fireplace finish / gas insert",
+   "tr": "Pinestone (GC)",
+   "ph": "P13",
+   "d": [
+    "fin.prime",
+    "gas.pipe"
+   ],
+   "g": [],
+   "f": [],
+   "w": "['rebuild-wood','gas-insert','cosmetic'].includes(A.fireplace)",
+   "G": {
+    "w": "Finish or install fireplace components to listings.",
+    "t": [
+     "M||Clearances to combustibles (mantels, trim) per the listed appliance / insert manufacturer.",
+     "C|IRC R1001 / R1003|Masonry fireplace and chimney requirements when rebuilding."
+    ]
+   }
+  },
+  {
+   "id": "fin.hardware",
+   "t": "Cabinet & door hardware, accessories",
+   "tr": "Finish Carpentry",
+   "ph": "P13",
+   "d": [
+    "fin.paint",
+    "fin.cabinets",
+    "fin.intdoors"
+   ],
+   "g": [],
+   "f": []
+  },
+  {
+   "id": "fin.touchup",
+   "t": "Final caulk & paint touch-up",
+   "tr": "Painting",
+   "ph": "P13",
+   "d": [
+    "fin.hardware",
+    "fin.eletrim",
+    "fin.plbtrim",
+    "fin.refinish"
+   ],
+   "g": [],
+   "f": []
+  },
+  {
+   "id": "fin.carpet",
+   "t": "Install carpet",
+   "tr": "Flooring",
+   "ph": "P13",
+   "d": [
+    "fin.touchup"
+   ],
+   "g": [],
+   "f": [],
+   "w": "has(A.flooring,'carpet')"
+  },
+  {
+   "id": "com.plb",
+   "t": "Plumbing commissioning (leaks, flush, temps)",
+   "tr": "Plumbing",
+   "ph": "P14",
+   "d": [
+    "fin.plbtrim"
+   ],
+   "g": [],
+   "f": [
+    "cp.final-plb"
+   ],
+   "w": "A.plumbing!=='none'",
+   "q": [
+    "Every fixture run; checked for leaks below (incl. crawl)",
+    "Aerators cleaned after flush",
+    "Shower / tub max temp tested ≤120°F",
+    "Water heater set & T&P discharge verified",
+    "Main & fixture shutoffs operate"
+   ],
+   "G": {
+    "w": "Run and verify every fixture before final inspection.",
+    "t": [
+     "C|IRC P2708.4|Shower valve high-limit stop set to limit outlet temperature to 120°F maximum.",
+     "P||Use a thermometer at each shower and record readings in the note."
+    ]
+   }
+  },
+  {
+   "id": "com.hvac",
+   "t": "HVAC startup & commissioning",
+   "tr": "HVAC",
+   "ph": "P14",
+   "d": [
+    "fin.hvactrim",
+    "ext.hvacpad"
+   ],
+   "g": [],
+   "f": [
+    "cp.final-mech"
+   ],
+   "w": "A.hvac!=='none'",
+   "q": [
+    "Refrigerant charge verified per manufacturer",
+    "Static pressure within equipment rating",
+    "Airflow at each register checked",
+    "Condensate & float switch tested with water",
+    "Filter installed; thermostat programmed"
+   ],
+   "G": {
+    "w": "Start up and verify the system — not just \"it blows cold.\"",
+    "t": [
+     "M||Charge, airflow and static pressure per equipment manufacturer.",
+     "S|ACCA QI (Standard 5)|Quality installation verification practices.",
+     "P||Request the startup sheet from the HVAC contractor and attach it to this task."
+    ]
+   }
+  },
+  {
+   "id": "com.ele",
+   "t": "Electrical testing (GFCI/AFCI, polarity, alarms)",
+   "tr": "Electrical",
+   "ph": "P14",
+   "d": [
+    "fin.eletrim"
+   ],
+   "g": [
+    "cp.service"
+   ],
+   "f": [
+    "cp.final-elec"
+   ],
+   "w": "A.electrical!=='none'",
+   "q": [
+    "Every receptacle tested with plug-in tester",
+    "Every GFCI / AFCI tested & reset",
+    "Smoke / CO alarms tested & interconnected",
+    "Every fixture & fan operates",
+    "Panel directory matches"
+   ]
+  },
+  {
+   "id": "com.gas",
+   "t": "Gas appliance startup & leak check",
+   "tr": "Gas",
+   "ph": "P14",
+   "d": [
+    "fin.appliances",
+    "com.hvac"
+   ],
+   "g": [
+    "cp.gasrelease"
+   ],
+   "f": [
+    "cp.final-gas"
+   ],
+   "w": "A.gas!=='none'",
+   "q": [
+    "Leak check at all appliance connections",
+    "Burners adjusted",
+    "CO check at appliances",
+    "Vent draft verified"
+   ]
+  },
+  {
+   "id": "com.fans",
+   "t": "Verify bath fan, hood & dryer exhaust airflow",
+   "tr": "Pinestone (GC)",
+   "ph": "P14",
+   "d": [
+    "fin.eletrim",
+    "hvac.terminations"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Each bath fan pulls (tissue / flow test) and damper opens",
+    "Range hood exhausts outdoors",
+    "Dryer damper opens freely"
+   ]
+  },
+  {
+   "id": "com.blower",
+   "t": "Blower door / duct leakage testing",
+   "tr": "Insulation",
+   "ph": "P14",
+   "d": [
+    "fin.eletrim",
+    "fin.hvactrim"
+   ],
+   "g": [],
+   "f": [
+    "cp.blower"
+   ],
+   "w": "A.hvac==='full' && A.hvacType!=='ductless' || A.insulWalls!=='none'",
+   "G": {
+    "w": "Test air tightness and duct leakage where required or as Pinestone verification.",
+    "t": [
+     "C|IRC N1102.4.1.2 / N1103.3.3|Building air leakage and duct leakage testing requirements for new construction; applicability to alterations is limited — confirm with AHJ.",
+     "P||Pinestone recommended: duct leakage test on every full HVAC replacement."
+    ]
+   }
+  },
+  {
+   "id": "com.water",
+   "t": "Water-intrusion check after rain",
+   "tr": "Pinestone (GC)",
+   "ph": "P14",
+   "d": [
+    "ext.gutters",
+    "ext.grade",
+    "roof.cover",
+    "dryin.check"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Crawl/basement dry",
+    "No interior stains at windows/doors",
+    "Gutters & downspouts discharging correctly"
+   ]
+  },
+  {
+   "id": "com.crawl",
+   "t": "Crawlspace post-work humidity & sump check",
+   "tr": "Pinestone (GC)",
+   "ph": "P14",
+   "d": [
+    "crawl.final",
+    "com.hvac"
+   ],
+   "g": [],
+   "f": [],
+   "w": "A.foundation==='crawlspace'",
+   "q": [
+    "RH reading recorded and compared to baseline",
+    "Sump / dehumidifier tested",
+    "No leaks at new plumbing"
+   ]
+  },
+  {
+   "id": "com.punch",
+   "t": "Pinestone internal punch walk",
+   "tr": "Pinestone (GC)",
+   "ph": "P14",
+   "d": [
+    "fin.touchup",
+    "com.plb",
+    "com.ele",
+    "com.hvac"
+   ],
+   "g": [],
+   "f": [],
+   "G": {
+    "w": "Walk the house room-by-room and create the punch list.",
+    "t": [
+     "P||Use the separate Pinestone Punch List tool for room-by-room items and sub PDFs; record the punch-list status here."
+    ]
+   }
+  },
+  {
+   "id": "com.punchfix",
+   "t": "Complete punch items",
+   "tr": "Pinestone (GC)",
+   "ph": "P14",
+   "d": [
+    "com.punch"
+   ],
+   "g": [],
+   "f": []
+  },
+  {
+   "id": "com.clean",
+   "t": "Final construction clean & filter change",
+   "tr": "Cleaning",
+   "ph": "P14",
+   "d": [
+    "com.punchfix",
+    "fin.carpet"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Inside cabinets & drawers",
+    "Windows & tracks",
+    "HVAC filter replaced after construction dust",
+    "Registers cleaned"
+   ]
+  },
+  {
+   "id": "com.finals",
+   "t": "Request & pass final inspections",
+   "tr": "Pinestone (GC)",
+   "ph": "P14",
+   "d": [
+    "com.plb",
+    "com.hvac",
+    "com.ele",
+    "com.gas",
+    "com.punchfix"
+   ],
+   "g": [],
+   "f": [
+    "cp.final-bldg",
+    "cp.co"
+   ]
+  },
+  {
+   "id": "com.docs",
+   "t": "Handoff package: warranties, manuals, as-built photos, shutoffs",
+   "tr": "Pinestone (GC)",
+   "ph": "P14",
+   "d": [
+    "com.finals"
+   ],
+   "g": [],
+   "f": [],
+   "q": [
+    "Warranties & manuals",
+    "Paint & finish schedule",
+    "Shutoff / panel / cleanout locations",
+    "Pre-drywall photo record",
+    "Permit closeout / CO copy",
+    "Subcontractor list"
+   ],
+   "G": {
+    "w": "Hand over everything the owner (or next buyer) needs to maintain the house.",
+    "t": [
+     "P||Export this project PDF set (full sequence + inspections) and include the pre-drywall photo record."
+    ]
+   }
+  },
+  {
+   "id": "com.walk",
+   "t": "Owner walkthrough & acceptance",
+   "tr": "Owner",
+   "ph": "P14",
+   "d": [
+    "com.clean",
+    "com.docs"
+   ],
+   "g": [],
+   "f": [
+    "cp.client"
+   ]
+  },
+  {
+   "id": "com.archive",
+   "t": "Archive project: export backup file & PDFs",
+   "tr": "Pinestone (GC)",
+   "ph": "P14",
+   "d": [
+    "com.walk"
+   ],
+   "g": [],
+   "f": [],
+   "G": {
+    "w": "Create the permanent project record.",
+    "t": [
+     "P||Export the project backup file (includes photos) and the full PDF set; store them in the Pinestone project folder and a second location."
+    ]
+   }
+  }
+ ]
+}
